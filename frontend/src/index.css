@@ -1,3 +1,15 @@
 :root {
   background-color: #88D0B1;
+  font-size: medium;
+  padding: 0;
+}
+
+* {
+  outline: none;
+  box-sizing: border-box;
+  list-style-type: none;
+}
+
+*:focus {
+  outline: none; 
 }
