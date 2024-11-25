@@ -5,7 +5,7 @@ const authMiddleware = require('../middlewares/authMiddleware');
 const fileUploadMiddleware = require('../middlewares/fileUploadMiddleware');
 
 // Tất cả các route bên dưới đều yêu cầu xác thực
-router.use(authMiddleware);
+// router.use(authMiddleware);
 
 router.get('/', postController.getAllPosts);
 router.post('/', fileUploadMiddleware.single('file'), postController.createPost);
