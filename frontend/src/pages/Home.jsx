@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import Header from "../components/Header"
+import Main from "../components/Main"
 import Sidebar from "../components/Sidebar"
 import { getPosts } from "../services/api";
 
@@ -27,8 +27,9 @@ function Home() {
   
   return (
     <div style={{padding: 0}}>
-        <Header />
+        
         <Sidebar />
+        <Main />
 
         <div style={{
           marginLeft: '300px',

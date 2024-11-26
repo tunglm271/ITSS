@@ -1,88 +1,78 @@
-#header {
-  position: fixed;
-  display: flex;
-  justify-content: space-between;
-  padding: 10px 20px;
-  align-items: center;
-  width: 100%;
-  top: 0;
-}
-
-#menu-button {
-  cursor: pointer;
-  background-color: transparent;
-  border: none;
-}
-
-#header > div {
-  display: flex;
-  gap: 30px;
-  align-items: center;
-  width: 80%;
-}
-
-#search-bar {
-  position: relative;
-  width: 60%;
-}
-
-#search-bar > input {
-  border-radius: 15px;
-  width: 100%;
-  padding: 10px;
-  border: none;
-}
-
-
-#search-bar > button {
+/* Sidebar */
+.sidebar {
   position: absolute;
-  right: 0;
-  border: none;
-  background-color: transparent;
-  top: 50%;
-  transform: translateY(-50%);
-}
-
-.header-button {
-  padding: 7px 12px;
-  border-radius: 15px;
-  border: none;
-  background-color: white;
-  font-weight: 600;
-  cursor: pointer;
-}
-
-.header-button:hover {
- background-color: black;
- color: white;
-}
-
-#sidebar {
-  background-color: white;
-  position: fixed;
+  width: 100px;
+  height: 280px;
   left: 0;
-  bottom: 0;
-  height: 90%;
+  top: 144px;
+  background-color: #f4f4f4;
+  border-right: 2px solid #ccc;
   padding: 10px;
-  width: 300px;
-  border-radius: 0 50px 0 0;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+  border-top-right-radius: 2dvh;
+  border-bottom-right-radius: 2dvh;
+}
+
+.sidebar ul {
+  padding: 0;
+  margin: 0;
+  list-style-type: none;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
 }
 
 .sidebar-tab {
-  background-color: transparent;
-  border: none;
+  position: relative;
   display: flex;
-  gap: 5px;
   align-items: center;
-  font-size: large;
+  justify-content: flex-start;
+  padding: 10px;
+  background-color: #f0f0f0;
+  border-radius: 8px;
+}
+
+.sidebar-tab:hover {
+  background-color: #e0e0e0;
+}
+
+.sidebar-tab svg {
+  margin-right: 8px;
+  margin-left: 10px;
+  font-size: 35px;
 }
 
 
+/* Main */
+
+/* Layout */
+.layout {
+  position: absolute;
+  width: 1276px;
+  height: 100%;
+  left: 50%;
+  margin-top: 20px;
+  transform: translateX(-50%);
+  background: #FFFFFF;
+}
+
+/* Pix */
+.pix {
+  box-sizing: border-box;
+  margin-top: 25px;
+  margin-left: 38px;
+  margin-right: 38px;
+  width: 1200;
+  height: 80%;
+  background: url(./assets/backround.jpg) no-repeat center center;
+  background-size: cover;
+  border: 1px solid #000000;
+  border-radius: 10px;
+  
+}
 
 @media (max-width: 768px) {
   #search-bar {
     display: none;
   }
 }
-
-
