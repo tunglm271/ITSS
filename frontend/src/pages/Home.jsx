@@ -1,12 +1,15 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import Main from "../components/Main"
 import Sidebar from "../components/Sidebar"
 import { getPosts } from "../services/api";
 import Background from "../components/Background";
+import CreatePostPopUp from "../components/CreatePostPopUp";
+import { globalContext } from "../App";
 
 
 function Home() {
   const [posts, setPosts] = useState([]);
+  const {togglePopup, setTogglePopup} = useContext(globalContext);
   useEffect(() => {
     const fetchPosts = async () => {
       try {
@@ -32,6 +35,8 @@ function Home() {
         
         <Sidebar />
         <Main />
+
+        <CreatePostPopUp  open={togglePopup} onClose={() => setTogglePopup(false)}/>        
     </div>
   )
 }

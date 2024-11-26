@@ -1,8 +1,9 @@
 import HomeIcon from '@mui/icons-material/Home';
 import AddIcon from '@mui/icons-material/Add';
 import LocalOfferIcon from '@mui/icons-material/LocalOffer';
-
 import { useLocation } from 'react-router-dom';
+import { globalContext } from '../App';
+import { useContext } from 'react';
 
 function isActive(pathname, path) {
   return pathname === path;
@@ -10,6 +11,9 @@ function isActive(pathname, path) {
 function Sidebar() {
   const location = useLocation();
   const { pathname } = location;
+  const {setTogglePopup} = useContext(globalContext);
+
+
 
   return (
     <div className="sidebar">
@@ -20,7 +24,7 @@ function Sidebar() {
           </button>
         </li>
         <li>
-          <button>
+          <button onClick={() => setTogglePopup(true)}>
             <AddIcon />
           </button>
         </li>
