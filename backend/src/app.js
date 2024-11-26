@@ -5,7 +5,6 @@ const path = require('path');
 const morgan = require('morgan');
 
 const authRoutes = require('./routes/authRoutes');
-const classRoutes = require('./routes/classRoutes');
 const postRoutes = require('./routes/postRoutes');
 
 const errorMiddleware = require('./middlewares/errorMiddleware');
@@ -25,7 +24,6 @@ app.use(morgan('combined'));
 
 // Routes
 app.use('/api/auth', authRoutes);
-app.use('/api/classes', classRoutes);
 app.use('/api/posts', postRoutes);
 
 // Error Handling Middleware
