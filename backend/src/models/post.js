@@ -1,13 +1,13 @@
+// src/models/Post.js
 const { DataTypes } = require('sequelize');
 const sequelize = require('../config/db');
 const User = require('./User');
-const Class = require('./Class');
 
 const Post = sequelize.define('Post', {
   id: {
     type: DataTypes.INTEGER,
-    primaryKey: true,
     autoIncrement: true,
+    primaryKey: true,
   },
   title: {
     type: DataTypes.STRING,
@@ -15,23 +15,17 @@ const Post = sequelize.define('Post', {
   },
   content: {
     type: DataTypes.TEXT,
-    allowNull: false,
   },
   fileUrl: {
     type: DataTypes.STRING,
     allowNull: true,
   },
-  // Các trường khác nếu cần
 }, {
-  timestamps: true,
+  // Các tùy chọn khác nếu cần
 });
 
-// Định nghĩa mối quan hệ
-User.hasMany(Post, { foreignKey: 'userId' });
+// Định nghĩa mối quan hệ với User
 Post.belongsTo(User, { foreignKey: 'userId' });
-
-Class.hasMany(Post, { foreignKey: 'classId' });
-Post.belongsTo(Class, { foreignKey: 'classId' });
+User.hasMany(Post, { foreignKey: 'userId' });
 
 module.exports = Post;
-
