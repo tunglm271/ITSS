@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import Main from "../components/Main"
 import Sidebar from "../components/Sidebar"
 import { getPosts } from "../services/api";
+import Background from "../components/Background";
 
 
 function Home() {
@@ -27,28 +28,10 @@ function Home() {
   
   return (
     <div style={{padding: 0}}>
+        <Background />
         
         <Sidebar />
         <Main />
-
-        <div style={{
-          marginLeft: '300px',
-          marginTop: '80px',
-        }}>
-          {posts.map((post) => {
-            return (
-              <div key={post.id} style={{
-                border: '1px solid #ccc',
-                borderRadius: '10px',
-                padding: '10px',
-                margin: '10px',
-              }}>
-                <h2>{post.title}</h2>
-                <p>{post.content}</p>
-              </div>
-            );
-          })}
-        </div>
     </div>
   )
 }
