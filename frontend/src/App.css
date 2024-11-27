@@ -169,6 +169,7 @@
   margin-top: 20px;
   display: flex;
   justify-content: space-between;
+  align-items: center;
   width: 100%;
 }
 
@@ -180,7 +181,42 @@
   border: 1px black solid;
 }
 
+#homepage-post-list {
+  margin-top: 30px;
+  display: flex;
+  gap: 30px;
+}
 
+.post-card {
+  border: black 1px solid;
+  padding: 12px;
+  border-radius: 10px;
+  min-width: 300px;
+}
+
+.tag-list {
+  display: flex;
+  gap: 7px;
+}
+
+.tag {
+  background-color: #D9D9D9;
+  padding: 3px 15px;
+  border-radius: 7px;
+
+}
+
+.flower-img {
+  width: 25px;
+  height: 25px;
+  margin-left: 30px;
+  object-fit: cover;
+}
+
+.post-title {
+  margin-top: 10px;
+  margin-bottom: 5px;
+}
 
 @media (max-width: 768px) {
   #search-bar {

@@ -1,6 +1,9 @@
 import Header from './Header'
 import PostSection from './PostSection'
-function Main() {
+import PropTypes from 'prop-types';
+
+function Main({posts}) {
+    console.log('Posts:', posts);
     return (
         <div className="layout">
            <div className="pix">
@@ -17,10 +20,15 @@ function Main() {
                     </div>
                 </div>
            </div>
-           <PostSection />
+           <PostSection posts={posts}/>
         </div>
 
     )
 }
+
+
+Main.propTypes = {
+    posts: PropTypes.array.isRequired,
+};
 
 export default Main

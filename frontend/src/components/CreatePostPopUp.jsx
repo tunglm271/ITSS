@@ -11,9 +11,53 @@ import CloseIcon from '@mui/icons-material/Close';
 import AddIcon from '@mui/icons-material/Add';
 import LocalOfferIcon from '@mui/icons-material/LocalOffer';
 import FileCopyIcon from '@mui/icons-material/FileCopy';
+import { styled } from '@mui/material/styles';
+import { useState } from 'react';
+import { createPost } from '../services/api';
+
+const VisuallyHiddenInput = styled('input')({
+    clip: 'rect(0 0 0 0)',
+    clipPath: 'inset(50%)',
+    height: 1,
+    overflow: 'hidden',
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    whiteSpace: 'nowrap',
+    width: 1,
+  });
 
 
 function CreatePostPopUp({ open, onClose }) {
+    const [slideName, setSlideName] = useState();
+    const [description, setDescription] = useState();
+    const [file, setFile] = useState(null);
+    const tags = [];
+
+    const handleSubmitPost = async () => {
+        const postData = new FormData();
+        postData.append('title', slideName);
+        postData.append('content', description);
+        postData.append('tags', JSON.stringify(tags));
+        if (file) {
+            postData.append('file', file);
+        }
+
+        try {
+            const response = await createPost(postData);
+            console.log('Post created successfully:', response);
+            onClose();
+        } catch (error) {
+            console.error('Error creating post:', error);
+        }
+    };
+
+    const handleFileChange = (event) => {
+        event.preventDefault();
+        setSlideName(event.target.files[0].name);
+        setFile(event.target.files[0]);
+    }
+
     return (
         <Dialog open={open} onClose={onClose} fullWidth maxWidth="sm" >
             <DialogTitle sx={{ padding: 0, borderBottom: 'none' }}>
@@ -54,6 +98,8 @@ function CreatePostPopUp({ open, onClose }) {
                     placeholder="何を考えている?..."
                     multiline
                     rows={10}
+                    value={description}
+                    onChange={(event) => setDescription(event.target.value)}
                     variant="outlined"
                     fullWidth
                     sx={{
@@ -126,45 +172,64 @@ function CreatePostPopUp({ open, onClose }) {
                     }}
                 />
 
-                {/* Upload Section */}
-                <Box sx={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: 1,
-                    border: '2px solid #FF9800',  // Đặt màu đường viền là màu cam
-                    borderRadius: '15px',  // Bo tròn các góc
-                    padding: '6px 12px',  // Thêm padding để tạo không gian xung quanh
-                    backgroundColor: 'white',  // Nền trắng cho box
-                    justifyContent: 'space-between',
-                }}>
+                <Button 
+                    sx={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: 1,
+                        border: '2px solid #FF9800',  
+                        borderRadius: '15px', 
+                        padding: '6px 12px',  
+                        backgroundColor: 'white',  
+                        justifyContent: 'space-between',
+                    }}
+                    variant="contained"
+                    tabIndex={-1}
+                    role={undefined}
+                    component="label"
+                >
                     <span
                         style={{
                             fontSize: '16px',
                             textTransform: 'none',
-                            color: '#333',  // Màu chữ
-                            cursor: 'pointer',  // Làm cho chữ có thể nhấn được
+                            color: '#333',  
+                            cursor: 'pointer',  
                         }}
                     >
                         追加
                     </span>
-
-                    {/* Thêm số lượng phía bên phải */}
-                    <Box sx={{
-                        fontSize: '16px',
-                        fontWeight: 'bold',
-                        color: '#f44336',  // Màu đỏ cho số lượng
-                    }}>
-
-                    </Box>
-
-                    {/* Thêm biểu tượng đính kèm */}
+                    
+                    <VisuallyHiddenInput
+                        type="file"
+                        onChange={(event) => handleFileChange(event)}
+                        multiple
+                    />
                     <FileCopyIcon sx={{ fontSize: '30px', color: '#333' }} />
-                </Box>
+                </Button>
+                {slideName && (
+                    <Box sx={{ display: 'flex', alignItems: 'center', mt: 2 }}>
+                        <p>{slideName}</p>
+                        <Button
+                            onClick={() => setSlideName(null)}
+                            color="error"
+                            variant="contained"
+                            sx={{
+                                height: '35px',
+                                borderRadius: '20px',
+                                padding: '8px 20px',
+                                textTransform: 'none',
+                                marginLeft: '10px',
+                            }}
+                        >
+                            削除
+                        </Button>
+                    </Box>
+                )}
             </DialogContent>
 
             <DialogActions sx={{ display: 'flex', justifyContent: 'center', width: '100%', borderBottom: 'none' }}>
                 <Button
-                    onClick={onClose}
+                    onClick={() => handleSubmitPost()}
                     color="primary"
                     variant="contained"
                     sx={{
@@ -177,7 +242,6 @@ function CreatePostPopUp({ open, onClose }) {
                     作成
                 </Button>
             </DialogActions>
-
         </Dialog>
     );
 }

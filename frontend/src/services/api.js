@@ -4,6 +4,9 @@ const API_BASE_URL = 'http://localhost:5000';
 
 const api = axios.create({
   baseURL: API_BASE_URL,
+  headers: {
+    'Content-Type': 'application/json',
+  },
 });
 
 export const getPosts = async () => {
@@ -14,11 +17,11 @@ export const getPosts = async () => {
       console.error('Error fetching posts:', error);
       throw error;
     }
-  };
+};
   
 export const createPost = async (postData) => {
 try {
-    const response = await api.post('/posts', postData);
+    const response = await api.post('/api/posts', postData);
     return response.data;
 } catch (error) {
     console.error('Error creating post:', error);

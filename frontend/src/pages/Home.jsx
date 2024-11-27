@@ -8,25 +8,27 @@ import { globalContext } from "../App";
 
 
 function Home() {
-  const [posts, setPosts] = useState([]);
+  const [posts, setPosts] = useState();
   const {togglePopup, setTogglePopup} = useContext(globalContext);
+
   useEffect(() => {
     const fetchPosts = async () => {
       try {
         const data = await getPosts();
-        setPosts(data.posts);
-        console.log(data);
+        setPosts(data);
+        console.log('Fetched data:', data); 
       } catch (error) {
         console.error('Error fetching posts:', error);
       }
     };
-
+  
     fetchPosts();
   }, []);
-
+  
   useEffect(() => {
-    console.log(posts);
+    console.log('Posts state updated:', posts);  
   }, [posts]);
+  
 
   
   return (
@@ -34,7 +36,7 @@ function Home() {
         <Background />
         
         <Sidebar />
-        <Main />
+        <Main posts={posts}/>
 
         <CreatePostPopUp  open={togglePopup} onClose={() => setTogglePopup(false)}/>        
     </div>
