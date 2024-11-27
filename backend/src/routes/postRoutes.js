@@ -8,7 +8,7 @@ const fileUploadMiddleware = require('../middlewares/fileUpLoadMiddleware');
 router.get('/', postController.getAllPosts);
 
 // Tạo bài post mới (yêu cầu xác thực và hỗ trợ upload file)
-router.post('/', authMiddleware, fileUploadMiddleware.single('file'), postController.createPost);
+router.post('/', fileUploadMiddleware.single('file'), postController.createPost);
 
 // Lấy bài post theo ID
 router.get('/:id', postController.getPostById);
