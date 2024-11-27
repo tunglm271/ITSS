@@ -12,7 +12,7 @@ function Login() {
   };
   return (
     <div>
-      <h1>サインイン</h1>
+      <h1 style={{textAlign: 'center'}}>サインイン</h1>
       <form id="login-form">
         <div className="">
           <label>メールアドレス</label>
