@@ -19,13 +19,16 @@ const getAllPosts = async (req, res) => {
 const createPost = async (req, res) => {
   const { title, content, tags } = req.body;  // Lấy thông tin từ body
   const file = req.file;
-
+  if (!title || !content) {
+    return res.status(400).json({ message: 'Title and content are required' });
+  }
   try {
     // Tạo bài post mới
     const newPost = await Post.create({
       title,
       content,
-      userId: req.user.id,
+      // userId: req.user.id,
+      userId: 1, // gán tạm thời
       fileUrl: file ? `/uploads/${file.filename}` : null,
     });
 
