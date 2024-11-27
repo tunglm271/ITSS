@@ -2,15 +2,21 @@ const express = require('express');
 const router = express.Router();
 const postController = require('../controllers/postController');
 const authMiddleware = require('../middlewares/authMiddleware');
-const fileUploadMiddleware = require('../middlewares/fileUploadMiddleware');
+const fileUploadMiddleware = require('../middlewares/fileUpLoadMiddleware');
 
-// Tất cả các route bên dưới đều yêu cầu xác thực
-// router.use(authMiddleware);
-
+// Lấy tất cả bài viết
 router.get('/', postController.getAllPosts);
-router.post('/', fileUploadMiddleware.single('file'), postController.createPost);
+
+// Tạo bài post mới (yêu cầu xác thực và hỗ trợ upload file)
+router.post('/', authMiddleware, fileUploadMiddleware.single('file'), postController.createPost);
+
+// Lấy bài post theo ID
 router.get('/:id', postController.getPostById);
-router.put('/:id', fileUploadMiddleware.single('file'), postController.updatePost);
-router.delete('/:id', postController.deletePost);
+
+// Cập nhật bài post (yêu cầu xác thực và hỗ trợ upload file)
+router.put('/:id', authMiddleware, fileUploadMiddleware.single('file'), postController.updatePost);
+
+// Xóa bài post (yêu cầu xác thực)
+router.delete('/:id', authMiddleware, postController.deletePost);
 
 module.exports = router;

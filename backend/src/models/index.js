@@ -1,11 +1,8 @@
-// src/models/index.js
-const sequelize = require('../config/db');
 const User = require('./User');
 const Post = require('./Post');
+const Tag = require('./Tag');
 
-// Định nghĩa các mối quan hệ đã được định nghĩa trong từng model riêng
-module.exports = {
-  sequelize,
-  User,
-  Post,
-};
+User.hasMany(Post); // Một người dùng có nhiều bài viết
+Tag.belongsToMany(Post, { through: 'post_tags' }); // Một tag có thể thuộc về nhiều bài viết
+
+module.exports = { User, Post, Tag };

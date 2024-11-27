@@ -1,11 +1,12 @@
-// src/controllers/postController.js
 const Post = require('../models/Post');
+const Tag = require('../models/Tag');
 const User = require('../models/User');
 
+// Lấy tất cả bài viết
 const getAllPosts = async (req, res) => {
   try {
     const posts = await Post.findAll({
-      include: [User],
+      include: [User, Tag], // Bao gồm thông tin User và các Tag liên quan
     });
     res.json(posts);
   } catch (err) {
@@ -14,17 +15,26 @@ const getAllPosts = async (req, res) => {
   }
 };
 
+// Tạo bài post mới
 const createPost = async (req, res) => {
-  const { title, content } = req.body;
+  const { title, content, tags } = req.body;  // Lấy thông tin từ body
   const file = req.file;
 
   try {
+    // Tạo bài post mới
     const newPost = await Post.create({
       title,
       content,
       userId: req.user.id,
       fileUrl: file ? `/uploads/${file.filename}` : null,
     });
+
+    // Xử lý các tag và liên kết với bài post
+    if (tags && tags.length > 0) {
+      const tagRecords = await Tag.findAll({ where: { name: tags } });
+      await newPost.setTags(tagRecords);  // Liên kết tags với bài post
+    }
+
     res.status(201).json(newPost);
   } catch (err) {
     console.error('Error in createPost:', err);
@@ -32,12 +42,13 @@ const createPost = async (req, res) => {
   }
 };
 
+// Lấy thông tin bài viết theo ID
 const getPostById = async (req, res) => {
   const { id } = req.params;
 
   try {
     const post = await Post.findByPk(id, {
-      include: [User],
+      include: [User, Tag],  // Bao gồm User và Tag
     });
     if (!post) {
       return res.status(404).json({ message: 'Post not found' });
@@ -49,9 +60,10 @@ const getPostById = async (req, res) => {
   }
 };
 
+// Cập nhật bài post
 const updatePost = async (req, res) => {
   const { id } = req.params;
-  const { title, content } = req.body;
+  const { title, content, tags } = req.body;
   const file = req.file;
 
   try {
@@ -65,7 +77,14 @@ const updatePost = async (req, res) => {
     if (file) {
       post.fileUrl = `/uploads/${file.filename}`;
     }
+
     await post.save();
+
+    // Cập nhật tags cho bài viết
+    if (tags && tags.length > 0) {
+      const tagRecords = await Tag.findAll({ where: { name: tags } });
+      await post.setTags(tagRecords);
+    }
 
     res.json(post);
   } catch (err) {
@@ -74,6 +93,7 @@ const updatePost = async (req, res) => {
   }
 };
 
+// Xóa bài post
 const deletePost = async (req, res) => {
   const { id } = req.params;
 
