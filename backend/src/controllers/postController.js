@@ -19,6 +19,9 @@ const getAllPosts = async (req, res) => {
 const createPost = async (req, res) => {
   const { title, content, tags } = req.body;  // Lấy thông tin từ body
   const file = req.file;
+
+  console.log('Received file:', file);// Kiểm tra file đã được gửi chưa
+
   if (!title || !content) {
     return res.status(400).json({ message: 'Title and content are required' });
   }

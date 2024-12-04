@@ -14,9 +14,9 @@ router.post('/', fileUploadMiddleware.single('file'), postController.createPost)
 router.get('/:id', postController.getPostById);
 
 // Cập nhật bài post (yêu cầu xác thực và hỗ trợ upload file)
-router.put('/:id', authMiddleware, fileUploadMiddleware.single('file'), postController.updatePost);
+router.put('/:id', fileUploadMiddleware.single('file'), postController.updatePost);
 
 // Xóa bài post (yêu cầu xác thực)
-router.delete('/:id', authMiddleware, postController.deletePost);
+router.delete('/:id', postController.deletePost);
 
 module.exports = router;
