@@ -10,6 +10,7 @@ sequelize.authenticate()
   .then(() => {
     console.log('Database connected...');
     // Sync models
+    //sequelize.sync({force: true }) xoa bang va tao lai 
     sequelize.sync()
       .then(() => {
         console.log('All models were synchronized successfully.');

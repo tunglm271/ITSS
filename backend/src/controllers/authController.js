@@ -39,8 +39,12 @@ exports.login = async (req, res, next) => {
     }
 
     // Tạo JWT token
-    const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, { expiresIn: '1h' });
-    res.json({ token });
+    const token = jwt.sign({ id: user.id, name: user.name }, process.env.JWT_SECRET, { expiresIn: '1h' });
+
+
+    res.json({
+      token,
+    });
   } catch (error) {
     console.error(error);
     next(error);
