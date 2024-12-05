@@ -13,7 +13,7 @@ import LocalOfferIcon from "@mui/icons-material/LocalOffer";
 import FileCopyIcon from "@mui/icons-material/FileCopy";
 import { styled } from "@mui/material/styles";
 import { useContext, useState } from "react";
-import { createPost } from "../services/api";
+import { createPost, getPosts } from "../services/api";
 import Typography from "@mui/material/Typography";
 import { globalContext } from "../App";
 
