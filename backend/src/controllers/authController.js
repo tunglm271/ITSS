@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken');
 
 exports.register = async (req, res, next) => {
   try {
-    const { username, email, password } = req.body;
+    const { name, email, password } = req.body;
 
     // Kiểm tra xem người dùng đã tồn tại hay chưa
     const existingUser = await User.findOne({ where: { email } });
@@ -13,7 +13,7 @@ exports.register = async (req, res, next) => {
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
-    const user = await User.create({ username, email, password: hashedPassword });
+    const user = await User.create({ name, email, password: hashedPassword });
 
     res.status(201).json({ message: 'User registered successfully', user });
   } catch (error) {
@@ -39,8 +39,12 @@ exports.login = async (req, res, next) => {
     }
 
     // Tạo JWT token
-    const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, { expiresIn: '1h' });
-    res.json({ token });
+    const token = jwt.sign({ id: user.id, name: user.name }, process.env.JWT_SECRET, { expiresIn: '1h' });
+
+
+    res.json({
+      token,
+    });
   } catch (error) {
     console.error(error);
     next(error);
