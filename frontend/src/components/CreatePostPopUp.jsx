@@ -205,6 +205,7 @@ function CreatePostPopUp({ open, onClose }) {
                         multiple
                     />
                     <FileCopyIcon sx={{ fontSize: '30px', color: '#333' }} />
+                    <input type="file" accept=".pdf" onChange={handleFileChange} />
                 </Button>
                 {slideName && (
                     <Box sx={{ display: 'flex', alignItems: 'center', mt: 2 }}>
