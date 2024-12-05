@@ -10,9 +10,10 @@ export const globalContext = createContext();
 
 function App() {
   const [ togglePopup, setTogglePopup ] = useState(false)
+  const [posts , setPosts] = useState();
 
   return (
-    <globalContext.Provider value={{togglePopup, setTogglePopup}}>
+    <globalContext.Provider value={{togglePopup, setTogglePopup, posts , setPosts}}>
      <Routes>
         <Route path="/" element={<Home />} />
         <Route element={<AuthLayout />}>

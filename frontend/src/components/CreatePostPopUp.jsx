@@ -12,8 +12,9 @@ import AddIcon from '@mui/icons-material/Add';
 import LocalOfferIcon from '@mui/icons-material/LocalOffer';
 import FileCopyIcon from '@mui/icons-material/FileCopy';
 import { styled } from '@mui/material/styles';
-import { useState } from 'react';
-import { createPost } from '../services/api';
+import { useContext, useState } from 'react';
+import { createPost, getPosts } from '../services/api';
+import { globalContext } from "../App";
 
 const VisuallyHiddenInput = styled('input')({
     clip: 'rect(0 0 0 0)',
@@ -33,6 +34,7 @@ function CreatePostPopUp({ open, onClose }) {
     const [description, setDescription] = useState();
     const [file, setFile] = useState(null);
     const tags = [];
+    const { setPosts } = useContext(globalContext);
 
     const handleSubmitPost = async () => {
         const postData = new FormData();
@@ -46,6 +48,8 @@ function CreatePostPopUp({ open, onClose }) {
         try {
             const response = await createPost(postData);
             console.log('Post created successfully:', response);
+            const data = await getPosts();
+            setPosts(data);
             onClose();
         } catch (error) {
             console.error('Error creating post:', error);
