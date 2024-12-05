@@ -1,6 +1,16 @@
 const Post = require('../models/Post');
 const Tag = require('../models/Tag');
 const User = require('../models/User');
+const fs = require('fs');
+const path = require('path');
+
+// Đảm bảo thư mục uploads tồn tại
+const ensureUploadsDirectoryExists = () => {
+  const uploadPath = path.join(__dirname, '../uploads');
+  if (!fs.existsSync(uploadPath)) {
+    fs.mkdirSync(uploadPath, { recursive: true });
+  }
+};
 
 // Lấy tất cả bài viết
 const getAllPosts = async (req, res) => {
@@ -19,21 +29,30 @@ const getAllPosts = async (req, res) => {
 const createPost = async (req, res) => {
   console.log(req)
   const { title, content, tags } = req.body;  // Lấy thông tin từ body
-  const file = req.file;
+  const file = req.file;  // Lấy file từ req.file (thường là dùng multer để upload file)
 
-  console.log('Received file:', file);// Kiểm tra file đã được gửi chưa
+  console.log('Received file:', file); // Kiểm tra file đã được gửi chưa
 
   if (!title || !content) {
     return res.status(400).json({ message: 'Title and content are required' });
   }
+
+  // Kiểm tra nếu có file thì tạo đường dẫn lưu trữ
+  let fileUrl = null;
+  if (file) {
+    ensureUploadsDirectoryExists();  // Đảm bảo thư mục uploads tồn tại
+
+    // Tạo URL cho file upload
+    fileUrl = `/uploads/${file.filename}`;
+  }
+
   try {
     // Tạo bài post mới
     const newPost = await Post.create({
       title,
       content,
-      // userId: req.user.id,
       userId: 1, // gán tạm thời
-      fileUrl: file ? `/uploads/${file.filename}` : null,
+      fileUrl,
     });
 
     // Xử lý các tag và liên kết với bài post
@@ -82,6 +101,7 @@ const updatePost = async (req, res) => {
     post.title = title || post.title;
     post.content = content || post.content;
     if (file) {
+      ensureUploadsDirectoryExists();  // Đảm bảo thư mục uploads tồn tại
       post.fileUrl = `/uploads/${file.filename}`;
     }
 
