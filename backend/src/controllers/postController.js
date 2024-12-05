@@ -20,12 +20,19 @@ const createPost = async (req, res) => {
   console.log(req)
   const { title, content, tags } = req.body;  // Lấy thông tin từ body
   const file = req.file;
+
+  console.log('Received file:', file);// Kiểm tra file đã được gửi chưa
+
+  if (!title || !content) {
+    return res.status(400).json({ message: 'Title and content are required' });
+  }
   try {
     // Tạo bài post mới
     const newPost = await Post.create({
       title,
       content,
-      userId: 1,
+      // userId: req.user.id,
+      userId: 1, // gán tạm thời
       fileUrl: file ? `/uploads/${file.filename}` : null,
     });
 

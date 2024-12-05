@@ -3,14 +3,14 @@ const sequelize = require('./config/db');
 const dotenv = require('dotenv');
 
 dotenv.config();
-
-const PORT = process.env.PORT || 5000;
+const PORT = 5000;
 
 // Kết nối đến Database
 sequelize.authenticate()
   .then(() => {
     console.log('Database connected...');
     // Sync models
+    //sequelize.sync({force: true }) xoa bang va tao lai 
     sequelize.sync()
       .then(() => {
         console.log('All models were synchronized successfully.');
