@@ -17,15 +17,15 @@ const getAllPosts = async (req, res) => {
 
 // Tạo bài post mới
 const createPost = async (req, res) => {
+  console.log(req)
   const { title, content, tags } = req.body;  // Lấy thông tin từ body
   const file = req.file;
-
   try {
     // Tạo bài post mới
     const newPost = await Post.create({
       title,
       content,
-      userId: req.user.id,
+      userId: 1,
       fileUrl: file ? `/uploads/${file.filename}` : null,
     });
 
