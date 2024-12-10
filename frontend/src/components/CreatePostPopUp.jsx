@@ -37,7 +37,7 @@ function CreatePostPopUp({ open, onClose }) {
 
     const handleSubmitPost = async () => {
         const postData = new FormData();
-        postData.append("title", slideName);
+        postData.append("title", title);
         postData.append("content", description);
         postData.append("tags", JSON.stringify(tags));
         if (file) {

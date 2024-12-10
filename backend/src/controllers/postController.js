@@ -27,7 +27,7 @@ const getAllPosts = async (req, res) => {
 
 // Tạo bài post mới
 const createPost = async (req, res) => {
-  const { title, content, tags } = req.body;  // Lấy thông tin từ body
+  const { title, content, tags, userId} = req.body;  // Lấy thông tin từ body
   const file = req.file;  // Lấy file từ req.file (thường là dùng multer để upload file)
 
   console.log('Received file:', file); // Kiểm tra file đã được gửi chưa
@@ -47,10 +47,10 @@ const createPost = async (req, res) => {
 
   try {
     // Tạo bài post mới
-    const newPost = await Post.create({
+    const newPost =  Post.build({
       title,
       content,
-      userId: 1, // gán tạm thời
+      userId, // gán tạm thời
       fileUrl,
     });
 
@@ -59,6 +59,8 @@ const createPost = async (req, res) => {
       const tagRecords = await Tag.findAll({ where: { name: tags } });
       await newPost.setTags(tagRecords);  // Liên kết tags với bài post
     }
+
+    await newPost.save();
 
     res.status(201).json(newPost);
   } catch (err) {
