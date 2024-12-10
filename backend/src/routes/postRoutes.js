@@ -7,6 +7,10 @@ const fileUploadMiddleware = require('../middlewares/fileUpLoadMiddleware');
 // Lấy tất cả bài viết
 router.get('/', postController.getAllPosts);
 
+// Tìm kiếm bài post theo tiêu đề hoặc nội dung
+router.get('/search', postController.searchPosts);
+
+
 // Tạo bài post mới (yêu cầu xác thực và hỗ trợ upload file)
 router.post('/', fileUploadMiddleware.single('file'), postController.createPost);
 
@@ -18,5 +22,6 @@ router.put('/:id', fileUploadMiddleware.single('file'), postController.updatePos
 
 // Xóa bài post (yêu cầu xác thực)
 router.delete('/:id', postController.deletePost);
+
 
 module.exports = router;
