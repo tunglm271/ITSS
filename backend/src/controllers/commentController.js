@@ -1,48 +1,58 @@
 // controllers/commentController.js
+const multer = require('multer');
 const { Comment, Post, User } = require('../models');
 
-// Tạo bình luận mới
+// Thiết lập multer để xử lý form data
+const storage = multer.memoryStorage(); // Hoặc bạn có thể dùng diskStorage nếu muốn lưu tệp trên server
+const upload = multer({ storage: storage });
+
+// Tạo bình luận
 const createComment = async (req, res) => {
-  const { content, postId } = req.body;
-  const userId = req.user.id; // Giả sử bạn đang sử dụng xác thực người dùng
+  const { postId, content, userId } = req.body; // Dữ liệu từ form data
+  // const userId = req.user.id;  // Giả sử bạn đang xác thực người dùng
+
+  if (!content) {
+    return res.status(400).json({ message: 'Content is required for the comment' });
+  }
 
   try {
-    const comment = await Comment.create({
-      content,
+    const post = await Post.findByPk(postId);
+    if (!post) {
+      return res.status(404).json({ message: 'Post not found' });
+    }
+
+    const newComment = await Comment.create({
       postId,
       userId,
+      content
     });
 
-    // Cập nhật lại số lượng bình luận của bài viết
-    const post = await Post.findByPk(postId);
-    post.commentsCount += 1;
-    await post.save();
-
-    res.status(201).json(comment);
+    res.status(201).json(newComment);
   } catch (err) {
-    console.error('Error creating comment:', err);
+    console.error('Error in createComment:', err);
     res.status(500).json({ message: 'Server error' });
   }
 };
 
-// Lấy tất cả bình luận của một bài viết
+// Lấy tất cả bình luận của một bài post
 const getCommentsByPost = async (req, res) => {
   const { postId } = req.params;
 
   try {
     const comments = await Comment.findAll({
       where: { postId },
-      include: [User], // Bao gồm thông tin người dùng
+      include: [User],  // Bao gồm thông tin người dùng đã bình luận
     });
 
-    res.json(comments);
+    if (comments.length === 0) {
+      return res.status(404).json({ message: 'No comments found' });
+    }
+
+    res.status(200).json(comments);
   } catch (err) {
-    console.error('Error fetching comments:', err);
+    console.error('Error in getCommentsByPost:', err);
     res.status(500).json({ message: 'Server error' });
   }
 };
 
-module.exports = {
-  createComment,
-  getCommentsByPost,
-};
+module.exports = { createComment, getCommentsByPost };

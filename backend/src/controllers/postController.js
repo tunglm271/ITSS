@@ -29,9 +29,9 @@ const getAllPosts = async (req, res) => {
 
 // Tạo bài post mới
 const createPost = async (req, res) => {
-    console.log(req);
-    const { title, content, tags } = req.body; // Lấy thông tin từ body
-    const file = req.file; // Lấy file từ req.file (thường là dùng multer để upload file)
+
+  const { title, content, tags, userId} = req.body;  // Lấy thông tin từ body
+  const file = req.file;  // Lấy file từ req.file (thường là dùng multer để upload file)
 
     console.log("Received file:", file); // Kiểm tra file đã được gửi chưa
 
@@ -46,30 +46,28 @@ const createPost = async (req, res) => {
     if (file) {
         ensureUploadsDirectoryExists(); // Đảm bảo thư mục uploads tồn tại
 
-        // Tạo URL cho file upload
-        fileUrl = `/uploads/${file.filename}`;
+  try {
+    // Tạo bài post mới
+    const newPost =  Post.build({
+      title,
+      content,
+      userId, // gán tạm thời
+      fileUrl,
+    });
+
+    // Xử lý các tag và liên kết với bài post
+    if (tags && tags.length > 0) {
+      const tagRecords = await Tag.findAll({ where: { name: tags } });
+      await newPost.setTags(tagRecords);  // Liên kết tags với bài post
     }
 
-    try {
-        // Tạo bài post mới
-        const newPost = await Post.create({
-            title,
-            content,
-            userId: 1, // gán tạm thời
-            fileUrl,
-        });
+    await newPost.save();
 
-        // Xử lý các tag và liên kết với bài post
-        if (tags && tags.length > 0) {
-            const tagRecords = await Tag.findAll({ where: { name: tags } });
-            await newPost.setTags(tagRecords); // Liên kết tags với bài post
-        }
-
-        res.status(201).json(newPost);
-    } catch (err) {
-        console.error("Error in createPost:", err);
-        res.status(500).json({ message: "Server error" });
-    }
+    res.status(201).json(newPost);
+  } catch (err) {
+    console.error('Error in createPost:', err);
+    res.status(500).json({ message: 'Server error' });
+  }
 };
 
 // Lấy thông tin bài viết theo ID
