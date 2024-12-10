@@ -8,8 +8,7 @@ import { globalContext } from "../App";
 
 
 function Home() {
-  const [posts, setPosts] = useState();
-  const {togglePopup, setTogglePopup} = useContext(globalContext);
+  const {togglePopup, setTogglePopup, posts, setPosts} = useContext(globalContext);
 
   useEffect(() => {
     const fetchPosts = async () => {

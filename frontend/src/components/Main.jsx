@@ -3,7 +3,6 @@ import PostSection from './PostSection'
 import PropTypes from 'prop-types';
 
 function Main({posts}) {
-    console.log('Posts:', posts);
     return (
         <div className="layout">
            <div className="pix">
