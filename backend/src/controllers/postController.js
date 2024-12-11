@@ -70,6 +70,8 @@ const createPost = async (req, res) => {
   }
 };
 
+}
+
 // Lấy thông tin bài viết theo ID
 const getPostById = async (req, res) => {
     const { id } = req.params;
