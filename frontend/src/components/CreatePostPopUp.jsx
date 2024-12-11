@@ -14,7 +14,6 @@ import FileCopyIcon from "@mui/icons-material/FileCopy";
 import { styled } from "@mui/material/styles";
 import { useContext, useState } from "react";
 import { createPost, getPosts } from "../services/api";
-import Typography from "@mui/material/Typography";
 import { globalContext } from "../App";
 
 const VisuallyHiddenInput = styled("input")({
@@ -32,14 +31,21 @@ const VisuallyHiddenInput = styled("input")({
 function CreatePostPopUp({ open, onClose }) {
     const [slideName, setSlideName] = useState();
     const [description, setDescription] = useState();
-    const [title, settitle] = useState();
+    const [title, setTitle] = useState();
     const [file, setFile] = useState(null);
+    const [isLoading, setIsLoading] = useState(false);
     const tags = [];
     const { setPosts } = useContext(globalContext);
 
     const handleSubmitPost = async () => {
+        if (!title || !description) {
+            alert("タイトルと内容を入力してください。");
+            return;
+        }
+
+        setIsLoading(true);
         const postData = new FormData();
-        postData.append("title", slideName);
+        postData.append("title", title);
         postData.append("content", description);
         postData.append("tags", JSON.stringify(tags));
         if (file) {
@@ -48,12 +54,16 @@ function CreatePostPopUp({ open, onClose }) {
 
         try {
             const response = await createPost(postData);
-            console.log('Post created successfully:', response);
+            console.log("Post created successfully:", response);
+
             const data = await getPosts();
             setPosts(data);
             onClose();
         } catch (error) {
             console.error("Error creating post:", error);
+            alert("投稿の作成中にエラーが発生しました。");
+        } finally {
+            setIsLoading(false);
         }
     };
 
@@ -64,20 +74,10 @@ function CreatePostPopUp({ open, onClose }) {
     };
 
     return (
-        <Dialog open={open} onClose={onClose} fullWidth maxWidth="sm" sx={{
-            minHeight: "500px",
-        }}>
+        <Dialog open={open} onClose={onClose} fullWidth maxWidth="sm" sx={{ minHeight: "500px" }}>
             <DialogTitle sx={{ padding: 0, borderBottom: "none" }}>
-                <Box
-                    sx={{
-                        position: "relative",
-                        textAlign: "center",
-                        paddingTop: "5px",
-                    }}
-                >
-                    <Box sx={{ fontSize: "25px", fontWeight: "bold" }}>
-                        ポスト作成
-                    </Box>
+                <Box sx={{ position: "relative", textAlign: "center", paddingTop: "5px" }}>
+                    <Box sx={{ fontSize: "25px", fontWeight: "bold" }}>ポスト作成</Box>
                     <Button
                         onClick={onClose}
                         color="error"
@@ -104,25 +104,21 @@ function CreatePostPopUp({ open, onClose }) {
                 />
             </DialogTitle>
 
-            <DialogContent dividers sx={{
-                minHeight: "400px",
-                overflowY: "auto",
-            }}>
+            <DialogContent dividers sx={{ minHeight: "400px", overflowY: "auto" }}>
                 <Box sx={{ display: "flex", alignItems: "flex-start", mb: 2 }}>
                     <Avatar
-                        src="https://s3-alpha-sig.figma.com/img/7725/9698/379a6812cb19259fb7ef359b6da622f2?Expires=1733702400&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=GvFkEod75-T7ZLlINwq-S9LcTWNtBU55FBrH8ChWhBNqtgCqId~wQOCJQPWiGbMcG4F6d8Ts2Zb3OkZLeVRZo988IA9QleQJVfMwhvs9LIGYRoNUgiIoUttt2jM-rNlxSBgos~Gb3nGz4HkRVKbL~anR-DqM5QNF~FX0TO7hGFY2wXGHnVe8~kUHKHZabBlWRpT2TPJNZoee18ubUc4GzAkYQTJq6tBxdoisQ7TD39il~1qjbXcI59-U9QjVADK32on0E7UtwtEDjnOuWTLWtUiJWPmVJoPCaDDuE1MZpsUdsSO5VzNOEwpVDA~i8ODBxqWclEtl~-tnackkb4g30A__"
+                        src="https://via.placeholder.com/56"
                         alt=""
                         sx={{ width: 56, height: 56, mr: 2, border: 1 }}
                     />
-
                     <TextField
                         placeholder="タイトルを入力してください..."
                         value={title}
-                        onChange={(event) => settitle(event.target.value)}
+                        onChange={(event) => setTitle(event.target.value)}
                         variant="outlined"
                         fullWidth
                         sx={{
-                            mb: 2, // Thêm khoảng cách bên dưới
+                            mb: 2,
                             "& .MuiOutlinedInput-root": {
                                 borderRadius: 0,
                                 "& fieldset": {
@@ -152,7 +148,6 @@ function CreatePostPopUp({ open, onClose }) {
                     }}
                 />
 
-                {/* Tags Section */}
                 <Box
                     sx={{
                         marginTop: "8px",
@@ -172,13 +167,7 @@ function CreatePostPopUp({ open, onClose }) {
                         borderRadius: "8px",
                     }}
                 >
-                    {[
-                        "PHP",
-                        "MongoDB",
-                        "データベース",
-                        "NodeJS",
-                        "Javascript",
-                    ].map((tag, index) => (
+                    {["PHP", "MongoDB", "データベース", "NodeJS", "Javascript"].map((tag, index) => (
                         <Button
                             key={index}
                             variant="outlined"
@@ -203,9 +192,7 @@ function CreatePostPopUp({ open, onClose }) {
                         }}
                     >
                         <AddIcon sx={{ fontSize: "20px", color: "#333" }} />
-                        <LocalOfferIcon
-                            sx={{ fontSize: "20px", color: "#333" }}
-                        />
+                        <LocalOfferIcon sx={{ fontSize: "20px", color: "#333" }} />
                     </Button>
                 </Box>
 
@@ -286,6 +273,7 @@ function CreatePostPopUp({ open, onClose }) {
                     onClick={() => handleSubmitPost()}
                     color="primary"
                     variant="contained"
+                    disabled={isLoading}
                     sx={{
                         height: "35px",
                         borderRadius: "20px",
@@ -293,7 +281,7 @@ function CreatePostPopUp({ open, onClose }) {
                         textTransform: "none",
                     }}
                 >
-                    作成
+                    {isLoading ? "作成中..." : "作成"}
                 </Button>
             </DialogActions>
         </Dialog>

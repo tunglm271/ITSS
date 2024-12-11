@@ -12,17 +12,20 @@ const Comment = sequelize.define('Comment', {
   postId: {
     type: DataTypes.INTEGER,
     references: {
-      model: Post, // Liên kết với bài viết
+      model: Post,
       key: 'id'
-    }
+    },
+    allowNull: false // Đảm bảo postId không được null
   },
   userId: {
     type: DataTypes.INTEGER,
     references: {
-      model: User, // Liên kết với người dùng
+      model: User,
       key: 'id'
-    }
+    },
+    allowNull: false // Đảm bảo userId không được null
   }
 });
+
 
 module.exports = Comment;
