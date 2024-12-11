@@ -21,7 +21,6 @@ const Comment = sequelize.define('Comment', {
     references: {
       model: User, // Liên kết với người dùng
       key: 'id'
-    }
   }
 });
 
