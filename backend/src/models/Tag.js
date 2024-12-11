@@ -6,6 +6,10 @@ const Tag = sequelize.define('Tag', {
     type: DataTypes.STRING,
     allowNull: false,
     unique: true
+  },
+  description: {
+    type: DataTypes.STRING,
+    allowNull: true
   }
 });
 
