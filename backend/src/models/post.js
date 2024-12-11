@@ -17,10 +17,14 @@ const Post = sequelize.define('Posts', {
     type: DataTypes.STRING,  // Lưu đường dẫn file
     allowNull: true
   },
-  commentCount: {
+  commentsCount: {
     type: DataTypes.INTEGER,
     defaultValue: 0,
     allowNull: false
+  },
+  userId: {
+    type: DataTypes.INTEGER,
+    allowNull: true
   }
 });
 

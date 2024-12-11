@@ -9,8 +9,8 @@ const Comment = require('./Comment');  // Thêm mô hình Comment
 User.hasMany(Post);  // Một người dùng có nhiều bài viết
 Post.belongsTo(User);  // Mỗi bài viết thuộc về một người   
 
-Tag.belongsToMany(Post, { through: 'post_tags' });  // Một tag có thể thuộc về nhiều bài viết
-Post.belongsToMany(Tag, { through: 'post_tags' });  // Một bài viết có thể có nhiều tag
+Tag.belongsToMany(Post, { through: 'post_tags', timestamps: false });  // Một tag có thể thuộc về nhiều bài viết
+Post.belongsToMany(Tag, { through: 'post_tags', timestamps: false });  // Một bài viết có thể có nhiều tag
 
 Post.hasMany(Comment, { foreignKey: 'postId', onDelete: 'CASCADE', onUpdate: 'CASCADE' });  // Một bài viết có nhiều bình luận
 Comment.belongsTo(Post, { foreignKey: 'postId' });  // Mỗi bình luận thuộc về một bài viết

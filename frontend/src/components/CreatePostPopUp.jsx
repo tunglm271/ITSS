@@ -47,7 +47,7 @@ function CreatePostPopUp({ open, onClose }) {
         const postData = new FormData();
         postData.append("title", title);
         postData.append("content", description);
-        postData.append("tags", JSON.stringify(tags));
+        // postData.append("tags", JSON.stringify(tags)); //comment lại do đang gặp lỗi liên quan đến tag ở db
         if (file) {
             postData.append("file", file);
         }
