@@ -7,6 +7,7 @@ const morgan = require('morgan');
 const authRoutes = require('./routes/authRoutes');
 const postRoutes = require('./routes/postRoutes');
 const commentRoutes = require('./routes/commentRoutes');
+const tagRoutes = require('./routes/tagRoutes');
 
 const errorMiddleware = require('./middlewares/errorMiddleware');
 const authMiddleware = require('./middlewares/authMiddleware');
@@ -27,6 +28,7 @@ app.use(morgan('combined'));
 app.use('/api/auth', authRoutes);
 app.use('/api/posts', postRoutes);
 app.use('/api', commentRoutes);
+app.use('/api',tagRoutes);
 
 app.get('/profile', authMiddleware, (req, res) => {
   const { id, name } = req.user;  // Lấy thông tin người dùng từ token

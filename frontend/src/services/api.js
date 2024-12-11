@@ -9,6 +9,16 @@ const api = axios.create({
   },
 });
 
+export const getPost = async (id) => {
+  try {
+    const response = await api.get('/api/posts/' + id);
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching posts:', error);
+    throw error;
+  }
+}
+
 export const getPosts = async () => {
     try {
       const response = await api.get('/api/posts');
@@ -59,6 +69,39 @@ export const searchPosts = async (query) => {
   }
 };
 
+export const loginRequest = async (loginData) => {
+  try {
+    console.log('loginData:', loginData.get('email'), loginData.get('password'));
+    const response = await api.post('/api/auth/login', loginData);
+    return response.data;
+  } catch (error) {
+    console.error('Error logging in:', error);
+    throw error;
+  }
+};
+
+
+export const registerRequest = async (registerData) => {
+  try {
+    console.log('registerData:', registerData);
+    const response = await api.post('/api/auth/register', registerData);
+    return response.data;
+  } catch (error) {
+    console.error('Error registering:', error);
+    throw error;
+  }
+}
+
+
+export const createComment = async (commentData) => {
+  try {
+    const response = await api.post('/api/comments', commentData);
+    return response.data;
+  } catch (error) {
+    console.error('Error creating comment:', error);
+    throw error;
+  }
+}
 
 
 export default api;
