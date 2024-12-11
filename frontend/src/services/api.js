@@ -43,22 +43,4 @@ try {
 }
 };
 
-export const searchPosts = async (query) => {
-  if (!query.trim()) {
-    throw new Error('Query parameter is required');
-  }
-
-  try {
-    const { data } = await api.get('/api/posts/search', {
-      params: { query },
-    });
-    return data;  // Trả về dữ liệu bài viết từ API
-  } catch (error) {
-    console.error('Error searching posts:', error.message || error);
-    throw error;  // Ném lỗi lên để có thể xử lý tại nơi gọi hàm
-  }
-};
-
-
-
 export default api;

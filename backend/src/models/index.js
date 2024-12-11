@@ -1,21 +1,27 @@
-// models/index.js
-const sequelize = require('../config/db');  // Đảm bảo rằng sequelize được nhập đúng cách
+const sequelize = require('../config/db');
 const User = require('./User');
 const Post = require('./Post');
 const Tag = require('./Tag');
-const Comment = require('./Comment');  // Thêm mô hình Comment
+const Comment = require('./Comment');
+const Rating = require('./Rating'); // Import Rating model
 
-// Khai báo mối quan hệ giữa các mô hình
-User.hasMany(Post);  // Một người dùng có nhiều bài viết
-Post.belongsTo(User);  // Mỗi bài viết thuộc về một người dùng
+// Define relationships
+User.hasMany(Post);
+Post.belongsTo(User);
 
-Tag.belongsToMany(Post, { through: 'post_tags' });  // Một tag có thể thuộc về nhiều bài viết
-Post.belongsToMany(Tag, { through: 'post_tags' });  // Một bài viết có thể có nhiều tag
+Tag.belongsToMany(Post, { through: 'post_tags' });
+Post.belongsToMany(Tag, { through: 'post_tags' });
 
-Post.hasMany(Comment, { foreignKey: 'postId', onDelete: 'CASCADE', onUpdate: 'CASCADE' });  // Một bài viết có nhiều bình luận
-Comment.belongsTo(Post, { foreignKey: 'postId' });  // Mỗi bình luận thuộc về một bài viết
+Post.hasMany(Comment, { foreignKey: 'postId', onDelete: 'CASCADE', onUpdate: 'CASCADE' });
+Comment.belongsTo(Post, { foreignKey: 'postId' });
 
-User.hasMany(Comment, { foreignKey: 'userId', onDelete: 'SET NULL', onUpdate: 'CASCADE' });  // Một người dùng có nhiều bình luận
-Comment.belongsTo(User, { foreignKey: 'userId' });  // Mỗi bình luận thuộc về một người dùng
+User.hasMany(Comment, { foreignKey: 'userId', onDelete: 'SET NULL', onUpdate: 'CASCADE' });
+Comment.belongsTo(User, { foreignKey: 'userId' });
 
-module.exports = { User, Post, Tag, Comment };  // Đảm bảo rằng Comment cũng được xuất ra
+Post.hasMany(Rating, { foreignKey: 'postId', onDelete: 'CASCADE', onUpdate: 'CASCADE' }); // One post can have many ratings
+Rating.belongsTo(Post, { foreignKey: 'postId' });
+
+User.hasMany(Rating, { foreignKey: 'userId', onDelete: 'CASCADE', onUpdate: 'CASCADE' }); // One user can give many ratings
+Rating.belongsTo(User, { foreignKey: 'userId' });
+
+module.exports = { User, Post, Tag, Comment, Rating }; // Export Rating model

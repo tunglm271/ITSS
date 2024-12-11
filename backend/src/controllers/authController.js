@@ -25,6 +25,7 @@ exports.register = async (req, res, next) => {
 exports.login = async (req, res, next) => {
   try {
     const { email, password } = req.body;
+    console.log('Received data:', { email, password }); // Thêm dòng này để kiểm tra dữ liệu
 
     // Kiểm tra nếu người dùng có tồn tại
     const user = await User.findOne({ where: { email } });
@@ -40,7 +41,6 @@ exports.login = async (req, res, next) => {
 
     // Tạo JWT token
     const token = jwt.sign({ id: user.id, name: user.name }, process.env.JWT_SECRET, { expiresIn: '1h' });
-
 
     res.json({
       token,

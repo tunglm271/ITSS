@@ -2,7 +2,7 @@ const { Rating, User } = require('../models');
 
 const createRating = async (req, res) => {
   const { rating, postId, comment } = req.body;
-  const userId = req.user.id; // Use authenticated user ID
+  const userId = 1; // Use a temporary value for userId
 
   try {
     const newRating = await Rating.create({ rating, postId, userId, comment });
