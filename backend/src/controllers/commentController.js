@@ -3,9 +3,9 @@ const multer = require('multer');
 const { Comment, Post, User } = require('../models');
 
 // Thiết lập multer để xử lý form data
-const storage = multer.memoryStorage(); // Hoặc bạn có thể dùng diskStorage nếu muốn lưu tệp trên server
-const upload = multer({ storage: storage });
-
+// const storage = multer.memoryStorage(); // Hoặc bạn có thể dùng diskStorage nếu muốn lưu tệp trên server
+// const upload = multer({ storage: storage });
+// comment do chưa làm chức năng gửi file trong comment
 // Tạo bình luận
 const createComment = async (req, res) => {
   const { postId, content, userId } = req.body; // Dữ liệu từ form data
@@ -41,7 +41,7 @@ const getCommentsByPost = async (req, res) => {
   try {
     const comments = await Comment.findAll({
       where: { postId },
-      include: [User],  // Bao gồm thông tin người dùng đã bình luận
+      // include: [User],  // Bao gồm thông tin người dùng đã bình luận //comnent do chưa làm được chức năng này
     });
 
     if (comments.length === 0) {

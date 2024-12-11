@@ -11,6 +11,9 @@ const Tag = sequelize.define('Tag', {
     type: DataTypes.STRING,
     allowNull: true
   }
+},{
+  timestamps: false
 });
+
 
 module.exports = Tag;
