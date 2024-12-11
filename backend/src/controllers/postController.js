@@ -32,8 +32,7 @@ const createPost = async (req, res) => {
 
   const { title, content, tags, userId} = req.body;  // Lấy thông tin từ body
   const file = req.file;  // Lấy file từ req.file (thường là dùng multer để upload file)
-
-    console.log("Received file:", file); // Kiểm tra file đã được gửi chưa
+    //console.log("Received file:", file); // Kiểm tra file đã được gửi chưa
 
     if (!title || !content) {
         return res
@@ -45,7 +44,8 @@ const createPost = async (req, res) => {
     let fileUrl = null;
     if (file) {
         ensureUploadsDirectoryExists(); // Đảm bảo thư mục uploads tồn tại
-
+        fileUrl = file.path;
+    }
   try {
     // Tạo bài post mới
     const newPost =  Post.build({
@@ -68,7 +68,7 @@ const createPost = async (req, res) => {
     console.error('Error in createPost:', err);
     res.status(500).json({ message: 'Server error' });
   }
-}};
+};
 
 // Lấy thông tin bài viết theo ID
 const getPostById = async (req, res) => {
