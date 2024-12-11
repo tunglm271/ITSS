@@ -16,12 +16,16 @@ const Post = sequelize.define('Posts', {
   fileUrl: {
     type: DataTypes.STRING,  // Lưu đường dẫn file
     allowNull: true
+  },
+  commentCount: {
+    type: DataTypes.INTEGER,
+    defaultValue: 0,
+    allowNull: false
   }
 });
 
 // Quan hệ nhiều-nhiều giữa Post và Tag
-Post.belongsToMany(Tag, { through: 'post_tags' });
-Post.belongsTo(User, { foreignKey: 'userId' });  // Mỗi bài viết thuộc về một người dùng
+  // Mỗi bài viết thuộc về một người dùng
 
 
 module.exports = Post;

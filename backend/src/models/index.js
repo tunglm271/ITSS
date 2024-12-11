@@ -7,7 +7,7 @@ const Comment = require('./Comment');  // Thêm mô hình Comment
 
 // Khai báo mối quan hệ giữa các mô hình
 User.hasMany(Post);  // Một người dùng có nhiều bài viết
-Post.belongsTo(User);  // Mỗi bài viết thuộc về một người dùng
+Post.belongsTo(User);  // Mỗi bài viết thuộc về một người   
 
 Tag.belongsToMany(Post, { through: 'post_tags' });  // Một tag có thể thuộc về nhiều bài viết
 Post.belongsToMany(Tag, { through: 'post_tags' });  // Một bài viết có thể có nhiều tag

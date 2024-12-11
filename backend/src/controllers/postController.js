@@ -45,10 +45,11 @@ const createPost = async (req, res) => {
     let fileUrl = null;
     if (file) {
         ensureUploadsDirectoryExists(); // Đảm bảo thư mục uploads tồn tại
-
+        fileUrl = `/uploads/${file.filename}`;
+    }
   try {
     // Tạo bài post mới
-    const newPost =  Post.build({
+    const newPost = await Post.create({
       title,
       content,
       userId, // gán tạm thời
