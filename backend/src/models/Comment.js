@@ -26,11 +26,8 @@ const Comment = sequelize.define('Comment', {
       model: 'Users', // Name of the target model
       key: 'id', // Key in the target model
     },
-    onDelete: 'SET NULL',
-    onUpdate: 'CASCADE',
-  },
-}, {
-  timestamps: true,
+    allowNull: true // Đảm bảo userId không được null
+  }
 });
 
 module.exports = Comment;
