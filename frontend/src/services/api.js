@@ -93,5 +93,15 @@ export const registerRequest = async (registerData) => {
 }
 
 
+export const createComment = async (commentData) => {
+  try {
+    const response = await api.post('/api/comments', commentData);
+    return response.data;
+  } catch (error) {
+    console.error('Error creating comment:', error);
+    throw error;
+  }
+}
+
 
 export default api;

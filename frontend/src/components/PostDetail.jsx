@@ -14,9 +14,28 @@ import ChatBubbleOutlineIcon from '@mui/icons-material/ChatBubbleOutline';
 import ReplyIcon from '@mui/icons-material/Reply';
 import SendIcon from '@mui/icons-material/Send';
 import { deepOrange } from '@mui/material/colors';
+import { useState } from 'react';
+import { createComment } from '../services/api';
+
 
 function PostDetail({post}) {
+    const [myComment, setMyComment] = useState('');
+
     const tagList = ['ITSS', "Nice", "PHP", "React"];
+
+
+    const sendComment = () => {
+        createComment({
+            content: myComment,
+            postId: post.id
+        }).then(() => {
+            setMyComment('');
+        }).catch((error) => {
+            console.error('Error sending comment:', error);
+        })
+    }
+
+
     return (
         <div className="post-layout">
             <div id='navigation-bar'>
@@ -97,8 +116,27 @@ function PostDetail({post}) {
                     <h1>Your answer</h1>
                     <div style={{display: 'flex', gap: '10px'}}>
                         <Avatar sx={{ bgcolor: deepOrange[500] }}>N</Avatar>                        
-                        <input type="text" style={{borderRadius: '5px', padding: '5px', width: '80%'}} placeholder='add your answer here'/>
-                        <button style={{backgroundColor: '#2c8aaa', borderRadius: '50%', border: 'none', padding: '10px', color: 'white', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+                        <input 
+                            type="text" 
+                            style={{borderRadius: '5px', padding: '5px', width: '80%'}} 
+                            placeholder='add your answer here'
+                            value={myComment}
+                            onChange={(e) => setMyComment(e.target.value)}
+                        />
+                        <button 
+                            style={{ 
+                                backgroundColor: '#2c8aaa', 
+                                borderRadius: '50%', 
+                                border: 'none', 
+                                padding: '10px', 
+                                color: 'white', 
+                                display: 'flex', 
+                                justifyContent: 'center', 
+                                alignItems: 'center',
+                                cursor: 'pointer'
+                                }}
+                            onClick={() => sendComment()}
+                            >
                             <SendIcon />
                         </button>
                     </div>
