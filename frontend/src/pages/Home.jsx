@@ -32,9 +32,6 @@ function Home() {
   
   return (
     <div style={{padding: 0}}>
-        <Background />
-        
-        <Sidebar />
         <Main posts={posts}/>
 
         <CreatePostPopUp  open={togglePopup} onClose={() => setTogglePopup(false)}/>        

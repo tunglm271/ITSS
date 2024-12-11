@@ -8,6 +8,7 @@ import AuthLayout from './layout/AuthLayout';
 import ForgotPassword from './pages/ForgotPassword';
 import { Navigate } from 'react-router-dom';
 import PostDetails from './pages/PostDetails';
+import MainLayout from './layout/MainLayout';
 export const globalContext = createContext();
 
 function App() {
@@ -21,13 +22,16 @@ function App() {
   return (
     <globalContext.Provider value={{togglePopup, setTogglePopup, posts , setPosts}}>
       <Routes>
-        <Route path="/" element={isAuthenticated() ? <Home /> : <Navigate to="/login" />} />
         
+        <Route element={<MainLayout />}>
+          <Route path="/posts/:id" element={<PostDetails />} />
+          <Route path="/" element={<Home />} />
+        </Route>
+
         <Route element={<AuthLayout />}>
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
-          <Route path="/posts/:id" element={<PostDetails />} />
         </Route>
       </Routes>
     </globalContext.Provider>
