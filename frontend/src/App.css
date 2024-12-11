@@ -137,6 +137,18 @@
   padding: 15px;
 }
 
+.post-layout {
+  position: absolute;
+  width: 80%;
+  min-height: 100%;
+  left: 50%;
+  margin-top: -250px;
+  transform: translateX(-50%);
+  background: #FFFFFF;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.9);
+  padding: 15px;
+}
+
 /* Pix */
 .pix {
   box-sizing: border-box;
