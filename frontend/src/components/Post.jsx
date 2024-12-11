@@ -3,6 +3,7 @@ import Tag from './Tag';
 import { Link } from 'react-router-dom';
 
 function Post({ post }) {
+  const fileServer = 'http://localhost:5000/';
   const tagList = ['ITSS', "Nice", "PHP", "React"];
 
   return (
@@ -24,7 +25,7 @@ function Post({ post }) {
 
       {/* Nếu bài viết có file, hiển thị liên kết tải xuống */}
       {post.fileUrl && (
-        <a href={post.fileUrl} download={post.title} className="download-link">
+        <a href={fileServer + post.fileUrl} download={post.title} className="download-link">
           ダウンロード (Download)
         </a>
       )}

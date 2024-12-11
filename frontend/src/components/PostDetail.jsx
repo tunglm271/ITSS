@@ -20,6 +20,7 @@ import { createComment } from '../services/api';
 
 function PostDetail({post}) {
     const [myComment, setMyComment] = useState('');
+    const fileServer = 'http://localhost:5000/';
 
     const tagList = ['ITSS', "Nice", "PHP", "React"];
 
@@ -88,7 +89,7 @@ function PostDetail({post}) {
                         <h1>{post.title}</h1>
                         <p>{post.content}</p>
                         
-                        <span><img width="40px" height="40px" src="../src/assets/pdfIcon.svg" /><Link>demo.pdf</Link></span>
+                        <span><img width="40px" height="40px" src="../src/assets/pdfIcon.svg" /><Link to={fileServer + post.fileUrl}>demo.pdf</Link></span>
 
                         <div id='action-list'>
                             <div className='action-btn' style={{width: '34%', justifyContent: 'center', padding: '3px 0', display: 'flex', alignItems: 'center'}}>
