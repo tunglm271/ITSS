@@ -28,7 +28,7 @@ function PostDetail({post}) {
         createComment({
             content: myComment,
             postId: post.id,
-            token: localStorage.getItem('token');
+            token: localStorage.getItem('token'),
         }).then(() => {
             setMyComment('');
         }).catch((error) => {
