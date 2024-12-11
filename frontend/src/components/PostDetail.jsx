@@ -27,7 +27,8 @@ function PostDetail({post}) {
     const sendComment = () => {
         createComment({
             content: myComment,
-            postId: post.id
+            postId: post.id,
+            token: localStorage.getItem('token');
         }).then(() => {
             setMyComment('');
         }).catch((error) => {
