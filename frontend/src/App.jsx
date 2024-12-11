@@ -6,16 +6,22 @@ import Login from './pages/Login'
 import Register from './pages/Register'
 import AuthLayout from './layout/AuthLayout';
 import ForgotPassword from './pages/ForgotPassword';
+import { Navigate } from 'react-router-dom';
 export const globalContext = createContext();
 
 function App() {
   const [ togglePopup, setTogglePopup ] = useState(false)
   const [posts , setPosts] = useState();
 
+  const isAuthenticated = () => {
+    return localStorage.getItem('token') !== null;
+  };
+
   return (
     <globalContext.Provider value={{togglePopup, setTogglePopup, posts , setPosts}}>
-     <Routes>
-        <Route path="/" element={<Home />} />
+      <Routes>
+        <Route path="/" element={isAuthenticated() ? <Home /> : <Navigate to="/login" />} />
+        
         <Route element={<AuthLayout />}>
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
