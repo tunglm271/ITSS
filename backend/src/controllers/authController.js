@@ -34,11 +34,10 @@ exports.login = async (req, res, next) => {
   try {
     // Nhận dữ liệu từ form (FormData)
     const { email, password } = req.body;
-
     // Kiểm tra xem người dùng có tồn tại không
     const user = await User.findOne({ where: { email } });
     if (!user) {
-      return res.status(400).json({ message: 'Invalid credentials' });
+      return res.status(400).json({ message: 'Invalid credentials user' });
     }
 
     // Kiểm tra mật khẩu

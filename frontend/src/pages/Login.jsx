@@ -3,8 +3,9 @@ import Switch from '@mui/material/Switch';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import { useState } from 'react';
 import { loginRequest } from '../services/api';
+import { useNavigate } from 'react-router-dom';
 function Login() {
-
+  const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -20,6 +21,8 @@ function Login() {
     try {
       const response = await loginRequest(loginData);
       console.log(response);
+      localStorage.setItem('token', response.token);
+      navigate('/');
     } catch (error) {
       console.error('Error logging in:', error);
     }

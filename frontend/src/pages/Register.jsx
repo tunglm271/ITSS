@@ -1,11 +1,11 @@
 import { registerRequest } from '../services/api';
 import { useState } from 'react';
-
+import { useNavigate } from 'react-router-dom';
 function Register() {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-
+    const navigate = useNavigate()
     const handleRegister = async (e) => {
         e.preventDefault();
         const registerData = new FormData();
@@ -15,6 +15,7 @@ function Register() {
         try {
             const response = await registerRequest(registerData);
             console.log(response);
+            navigate('/login');
         } catch (error) {
             console.error('Error registering:', error);
         }

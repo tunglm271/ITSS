@@ -61,7 +61,7 @@ export const searchPosts = async (query) => {
 
 export const loginRequest = async (loginData) => {
   try {
-    console.log('loginData:', loginData);
+    console.log('loginData:', loginData.get('email'), loginData.get('password'));
     const response = await api.post('/api/auth/login', loginData);
     return response.data;
   } catch (error) {
