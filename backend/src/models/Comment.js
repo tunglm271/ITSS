@@ -23,7 +23,7 @@ const Comment = sequelize.define('Comment', {
       model: User,
       key: 'id'
     },
-    allowNull: false // Đảm bảo userId không được null
+    allowNull: true // Đảm bảo userId không được null
   }
 });
 

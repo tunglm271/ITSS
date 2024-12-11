@@ -68,7 +68,7 @@ const createPost = async (req, res) => {
     console.error('Error in createPost:', err);
     res.status(500).json({ message: 'Server error' });
   }
-};
+}};
 
 // Lấy thông tin bài viết theo ID
 const getPostById = async (req, res) => {
