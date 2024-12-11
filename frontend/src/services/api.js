@@ -59,6 +59,29 @@ export const searchPosts = async (query) => {
   }
 };
 
+export const loginRequest = async (loginData) => {
+  try {
+    console.log('loginData:', loginData);
+    const response = await api.post('/api/auth/login', loginData);
+    return response.data;
+  } catch (error) {
+    console.error('Error logging in:', error);
+    throw error;
+  }
+};
+
+
+export const registerRequest = async (registerData) => {
+  try {
+    console.log('registerData:', registerData);
+    const response = await api.post('/api/auth/register', registerData);
+    return response.data;
+  } catch (error) {
+    console.error('Error registering:', error);
+    throw error;
+  }
+}
+
 
 
 export default api;
