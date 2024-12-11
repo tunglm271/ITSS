@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import Tag from './Tag';
+import { Link } from 'react-router-dom';
 
 function Post({ post }) {
   const tagList = ['ITSS', "Nice", "PHP", "React"];
@@ -18,7 +19,7 @@ function Post({ post }) {
           className="flower-img"
         />
       </div>
-      <h2 className="post-title">{post.title}</h2>
+      <Link to={"/posts/" + post.id}><h2 className="post-title">{post.title}</h2></Link>
       <p>{post.content}</p>
 
       {/* Nếu bài viết có file, hiển thị liên kết tải xuống */}
