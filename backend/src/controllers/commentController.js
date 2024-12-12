@@ -41,7 +41,13 @@ const getCommentsByPost = async (req, res) => {
   try {
     const comments = await Comment.findAll({
       where: { postId },
-      // include: [User],  // Bao gồm thông tin người dùng đã bình luận //comnent do chưa làm được chức năng này
+      include: [
+        {
+          model: User,
+          as: 'User',
+          attributes: ['name'],
+        },
+      ],
     });
 
     if (comments.length === 0) {
@@ -54,5 +60,6 @@ const getCommentsByPost = async (req, res) => {
     res.status(500).json({ message: 'Server error' });
   }
 };
+
 
 module.exports = { createComment, getCommentsByPost };

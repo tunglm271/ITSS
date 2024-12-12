@@ -4,8 +4,9 @@ const { createComment, getCommentsByPost } = require('../controllers/commentCont
 const upload = require('multer')(); 
 const router = express.Router();
 
-// Route để tạo bình luận
-router.post('/comments',upload.none() ,createComment);
+
+router.post('/comments', upload.none(), createComment);
+
 
 // Route để lấy tất cả bình luận của một bài post
 router.get('/posts/:postId/comments', getCommentsByPost);
