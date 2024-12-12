@@ -18,14 +18,15 @@ import { useEffect, useState } from 'react';
 import { createComment, getUserInfor } from '../services/api';
 import CommentRow from './CommentRow';
 import { getComments } from '../services/api';
-function PostDetail({post}) {
+function PostDetail({post, id}) {
 
     const [user, setUser] = useState({});
     const [comments, setComments] = useState([]);
 
     const fetchComments = async () => {
+        console.log(post);
         try {
-            const comments = await getComments(post.id);
+            const comments = await getComments(id);
             setComments(comments);  
         } catch(error) {
             console.error('Error:', error);

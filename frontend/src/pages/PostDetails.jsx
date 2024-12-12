@@ -22,7 +22,7 @@ function PostDetails() {
       
     return (
         <div>
-            <PostDetail post={post}/>
+            <PostDetail post={post} id={id}/>
         </div>
     );
 }
