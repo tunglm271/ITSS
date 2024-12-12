@@ -21,6 +21,11 @@ function Header() {
     const [notFound, setNotFound] = useState(false);
     const [openModal, setOpenModal] = useState(false);
 
+    const handleLogOut = () => {
+        localStorage.removeItem("token");
+        window.location.reload();
+    };
+
     const handleSearch = async () => {
         if (!searchQuery.trim()) return;
         setLoading(true);
@@ -68,7 +73,7 @@ function Header() {
                 <PublicIcon sx={{ fontSize: 25 }} />
             </button>
             <p>EN</p>
-            <button className="header-button">
+            <button className="header-button" onClick={() => handleLogOut()}>
                 <LogoutIcon sx={{ fontSize: 25 }} />
             </button>
 
