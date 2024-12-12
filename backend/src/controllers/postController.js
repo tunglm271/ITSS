@@ -16,9 +16,7 @@ const ensureUploadsDirectoryExists = () => {
 
 // Lấy tất cả bài viết
 const getAllPosts = async (req, res) => {
-    console.log('0');
     try {
-        console.log('1');
         const posts = await Post.findAll({
             // include: [User, Tag], // Bao gồm thông tin User và các Tag liên quan
         });
@@ -35,6 +33,8 @@ const createPost = async (req, res) => {
   const { title, content, tags, userId} = req.body;  // Lấy thông tin từ body
   const file = req.file;  // Lấy file từ req.file (thường là dùng multer để upload file)
 
+    console.log("Received file:", file); // Kiểm tra file đã được gửi chưa
+
     if (!title || !content) {
         return res
             .status(400)
@@ -45,10 +45,11 @@ const createPost = async (req, res) => {
     let fileUrl = null;
     if (file) {
         ensureUploadsDirectoryExists(); // Đảm bảo thư mục uploads tồn tại
+        fileUrl = file.path;
     }
   try {
     // Tạo bài post mới
-    const newPost = await Post.create({
+    const newPost =  Post.build({
       title,
       content,
       userId, // gán tạm thời
@@ -68,7 +69,7 @@ const createPost = async (req, res) => {
     console.error('Error in createPost:', err);
     res.status(500).json({ message: 'Server error' });
   }
-}};
+};
 
 // Lấy thông tin bài viết theo ID
 const getPostById = async (req, res) => {
@@ -76,7 +77,7 @@ const getPostById = async (req, res) => {
 
     try {
         const post = await Post.findByPk(id, {
-            include: [User, Tag], // Bao gồm User và Tag
+            // include: [User, Tag], // Bao gồm User và Tag
         });
         if (!post) {
             return res
@@ -159,7 +160,7 @@ const searchPosts = async (req, res) => {
           where: {
               title: query, // So khớp chính xác
           },
-          include: [User, Tag],
+        //   include: [User, Tag],
       });
 
       // Nếu tìm thấy bài viết chính xác, trả về
@@ -175,7 +176,7 @@ const searchPosts = async (req, res) => {
                   { content: { [Op.like]: `%${query}%` } },
               ],
           },
-          include: [User, Tag],
+        //   include: [User, Tag],
       });
 
       // Trả về kết quả tìm kiếm, dù có bài viết hay không
