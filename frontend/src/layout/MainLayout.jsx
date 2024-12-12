@@ -1,4 +1,4 @@
-import { Outlet } from 'react-router-dom';
+import { Navigate, Outlet } from 'react-router-dom';
 import Background from "../components/Background";
 import Sidebar from "../components/Sidebar"
 import './AuthLayout.css';
@@ -9,13 +9,18 @@ import CreatePostPopUp from "../components/CreatePostPopUp";
 function MainLayout() {
 
   const { togglePopup, setTogglePopup } = useContext(globalContext);
+
+  const isAuthenticated = () => {
+    return localStorage.getItem('token') !== null;
+  };
+
   return (
     <div style={{padding: 0}}>
 
         <Background />
         
         <Sidebar />
-        <Outlet />
+        {isAuthenticated() ? <Outlet />: <Navigate to="/login"/>}
 
         <CreatePostPopUp  open={togglePopup} onClose={() => setTogglePopup(false)}/>        
     </div>

@@ -135,4 +135,14 @@ export const getComments = async (postId) => {
 }
 
 
+export const getMyPost = async (userId) => {
+  try {
+    const response = await api.get(`/api/posts/${userId}`);
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching my posts:', error);
+    throw error;
+  }
+}
+
 export default api;

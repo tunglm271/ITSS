@@ -17,10 +17,6 @@ function App() {
   const [ togglePopup, setTogglePopup ] = useState(false)
   const [posts , setPosts] = useState();
 
-  const isAuthenticated = () => {
-    return localStorage.getItem('token') !== null;
-  };
-
   return (
     <globalContext.Provider value={{togglePopup, setTogglePopup, posts , setPosts}}>
       <Routes>

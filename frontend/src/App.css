@@ -350,6 +350,32 @@
   align-items: center;
 }
 
+.post-big-card {
+  border: black 1px solid;
+  padding: 12px;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+
+.row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.edit-btn {
+  background-color: transparent;
+  cursor: pointer;
+  border-radius: 50%;
+}
+
+.edit-btn:hover {
+  color: #FFA500;
+}
+
 
 @media (max-width: 768px) {
   #search-bar {

@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { getUserInfor } from '../services/api';
 import Header from '../components/Header';
 import AddIcon from '@mui/icons-material/Add';
-
+import PostBigCard from '../components/PostBigCard';
 const PersonalPage = () => {
 
 
@@ -34,6 +34,13 @@ const PersonalPage = () => {
                     <AddIcon />
                 </button>
            </div>
+
+            <div style={{display: 'flex', flexDirection: 'column', gap: '20px', marginTop: '20px'}}> 
+                 <PostBigCard />
+                 <PostBigCard />
+                 <PostBigCard />
+            </div>
+
         </div>
 
     );

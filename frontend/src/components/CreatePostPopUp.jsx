@@ -12,8 +12,8 @@ import AddIcon from "@mui/icons-material/Add";
 import LocalOfferIcon from "@mui/icons-material/LocalOffer";
 import FileCopyIcon from "@mui/icons-material/FileCopy";
 import { styled } from "@mui/material/styles";
-import { useContext, useState } from "react";
-import { createPost, getPosts } from "../services/api";
+import { useContext, useState, useEffect } from "react";
+import { createPost, getPosts, getUserInfor } from "../services/api";
 import { globalContext } from "../App";
 
 const VisuallyHiddenInput = styled("input")({
@@ -34,8 +34,17 @@ function CreatePostPopUp({ open, onClose }) {
     const [title, setTitle] = useState();
     const [file, setFile] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
+    const [user, setUser] = useState(null);
     const tags = [];
     const { setPosts } = useContext(globalContext);
+
+    useEffect(() => {
+        const fetchUser = async () => {
+            const user = await getUserInfor();
+            setUser(user);
+        };
+        fetchUser();
+    }, []);
 
     const handleSubmitPost = async () => {
         if (!title || !description) {
@@ -45,6 +54,7 @@ function CreatePostPopUp({ open, onClose }) {
 
         setIsLoading(true);
         const postData = new FormData();
+        postData.append("userId", user.id);
         postData.append("title", title);
         postData.append("content", description);
         // postData.append("tags", JSON.stringify(tags)); //comment lại do đang gặp lỗi liên quan đến tag ở db
