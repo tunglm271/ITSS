@@ -14,27 +14,48 @@ import ChatBubbleOutlineIcon from '@mui/icons-material/ChatBubbleOutline';
 import ReplyIcon from '@mui/icons-material/Reply';
 import SendIcon from '@mui/icons-material/Send';
 import { deepOrange } from '@mui/material/colors';
-import { useState } from 'react';
-import { createComment } from '../services/api';
-
+import { useEffect, useState } from 'react';
+import { createComment, getUserInfor } from '../services/api';
+import { use } from 'react';
 
 function PostDetail({post}) {
+
+    const [user, setUser] = useState({});
+
+    useEffect(() => {
+        const fetchUser = async () => {
+            try {
+                const user = await getUserInfor();
+                setUser(user);
+            } catch(error) {
+                console.error('Error:', error);
+            }
+        }
+
+        fetchUser();
+    },[])
+
+
     const [myComment, setMyComment] = useState('');
-    const fileServer = 'http://localhost:5000/';
+    const fileServer = 'http://localhost:5000';
 
     const tagList = ['ITSS', "Nice", "PHP", "React"];
 
 
     const sendComment = () => {
-        createComment({
+        const commentData = {
             content: myComment,
             postId: post.id,
-            token: localStorage.getItem('token'),
-        }).then(() => {
+            userId: user.id,
+        };
+        console.log(JSON.stringify(commentData));
+        createComment(commentData)
+            .then(() => {
             setMyComment('');
-        }).catch((error) => {
+            })
+            .catch((error) => {
             console.error('Error sending comment:', error);
-        })
+            });
     }
 
 
