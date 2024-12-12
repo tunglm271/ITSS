@@ -9,6 +9,8 @@ import ForgotPassword from './pages/ForgotPassword';
 import Tabs from './pages/Tabs';
 import PostDetails from './pages/PostDetails';
 import MainLayout from './layout/MainLayout';
+import PersonalPage from './pages/PersonalPage';
+
 export const globalContext = createContext();
 
 function App() {
@@ -27,6 +29,7 @@ function App() {
           <Route path="/posts/:id" element={<PostDetails />} />
           <Route path="/" element={<Home />} />
           <Route path="/tabs" element={<Tabs />} />
+          <Route path="/personal" element={<PersonalPage />} />
         </Route>
 
         <Route element={<AuthLayout />}>

@@ -95,7 +95,7 @@ export const registerRequest = async (registerData) => {
 
 export const createComment = async (commentData) => {
   try {
-    const response = await api.post('/api/comments', commentData);
+    const response = await api.post(`api/comments`, commentData);
     return response.data;
   } catch (error) {
     console.error('Error creating comment:', error);
@@ -103,5 +103,25 @@ export const createComment = async (commentData) => {
   }
 }
 
+
+export const getUserInfor = async () => {
+  try {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      throw new Error('No token found');
+    }
+
+    const response = await api.get('/profile', {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    console.log(response);
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching user information:', error);
+    throw error;
+  }
+}
 
 export default api;
