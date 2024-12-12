@@ -18,6 +18,14 @@ import { useEffect, useState } from 'react';
 import { createComment, getUserInfor } from '../services/api';
 import { use } from 'react';
 
+function Attachment({url}){
+    const fileServer = 'http://localhost:5000';
+    if(url == null) return (<span>No file included.</span>);
+    return (
+        <span><img width="40px" height="40px" src="../src/assets/pdfIcon.svg" /><Link to={fileServer + url} target="_blank">demo.pdf</Link></span>
+    );
+}
+
 function PostDetail({post}) {
 
     const [user, setUser] = useState({});
@@ -110,7 +118,7 @@ function PostDetail({post}) {
                         <h1>{post.title}</h1>
                         <p>{post.content}</p>
                         
-                        <span><img width="40px" height="40px" src="../src/assets/pdfIcon.svg" /><Link to={fileServer + post.fileUrl}>demo.pdf</Link></span>
+                        <Attachment url={post.fileUrl} />
 
                         <div id='action-list'>
                             <div className='action-btn' style={{width: '34%', justifyContent: 'center', padding: '3px 0', display: 'flex', alignItems: 'center'}}>
