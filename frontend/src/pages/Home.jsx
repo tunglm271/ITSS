@@ -3,12 +3,11 @@ import Main from "../components/Main"
 import Sidebar from "../components/Sidebar"
 import { getPosts } from "../services/api";
 import Background from "../components/Background";
-import CreatePostPopUp from "../components/CreatePostPopUp";
 import { globalContext } from "../App";
 
 
 function Home() {
-  const {togglePopup, setTogglePopup, posts, setPosts} = useContext(globalContext);
+  const { posts, setPosts} = useContext(globalContext);
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -34,7 +33,6 @@ function Home() {
     <div style={{padding: 0}}>
         <Main posts={posts}/>
 
-        <CreatePostPopUp  open={togglePopup} onClose={() => setTogglePopup(false)}/>        
     </div>
   )
 }

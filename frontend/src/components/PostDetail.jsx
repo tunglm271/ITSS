@@ -16,11 +16,22 @@ import SendIcon from '@mui/icons-material/Send';
 import { deepOrange } from '@mui/material/colors';
 import { useEffect, useState } from 'react';
 import { createComment, getUserInfor } from '../services/api';
-import { use } from 'react';
-
+import CommentRow from './CommentRow';
+import { getComments } from '../services/api';
 function PostDetail({post}) {
 
     const [user, setUser] = useState({});
+    const [comments, setComments] = useState([]);
+
+    const fetchComments = async () => {
+        try {
+            const comments = await getComments(post.id);
+            setComments(comments);  
+        } catch(error) {
+            console.error('Error:', error);
+        }
+    }
+
 
     useEffect(() => {
         const fetchUser = async () => {
@@ -32,6 +43,7 @@ function PostDetail({post}) {
             }
         }
 
+        fetchComments();
         fetchUser();
     },[])
 
@@ -51,11 +63,15 @@ function PostDetail({post}) {
         console.log(JSON.stringify(commentData));
         createComment(commentData)
             .then(() => {
-            setMyComment('');
+                setMyComment('');
+            })
+            .then(() => {
+                fetchComments();
             })
             .catch((error) => {
             console.error('Error sending comment:', error);
             });
+            
     }
 
 
@@ -130,6 +146,13 @@ function PostDetail({post}) {
             
             <div id='comment-section'>
                     <h1>Answers</h1>
+                    
+                    <div style={{display: 'flex', flexDirection: 'column', gap: '10px'}}>
+                        {comments.map((comment, index) => (
+                            <CommentRow key={index} comment={comment}/>
+                        ))}
+                    </div>
+
 
                     <Divider sx={{
                         color: 'black',

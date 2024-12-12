@@ -4,6 +4,7 @@ import LocalOfferIcon from '@mui/icons-material/LocalOffer';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { globalContext } from '../App';
 import { useContext } from 'react';
+import { Avatar } from '@mui/material';
 
 function isActive(pathname, path) {
   return pathname === path;
@@ -29,10 +30,19 @@ function Sidebar() {
             <AddIcon />
           </button>
         </li>
-        <li id={isActive(pathname, '/tabs') ? 'active' : ''}>
-          <li id={pathname.startsWith('/tabs') ? 'active' : ''}></li>
+        <li id={pathname.startsWith('/tabs') ? 'active' : ''}>
           <button onClick={() => navigate("/tabs")}>
             <LocalOfferIcon />
+          </button>
+        </li>
+        <li id={isActive(pathname, '/personal') ? 'active' : ''}>
+          <button onClick={() => navigate("/personal")} style={{padding: 0}}>
+            <Avatar alt="User" src="https://mui.com/static/images/avatar/1.jpg" sx={{
+              width: '40px',
+              height: '40px',
+              marginLeft: 'auto',
+              marginRight: 'auto'
+            }}/>
           </button>
         </li>
       </ul>
