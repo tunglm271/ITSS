@@ -16,9 +16,11 @@ const ensureUploadsDirectoryExists = () => {
 
 // Lấy tất cả bài viết
 const getAllPosts = async (req, res) => {
+    console.log('0');
     try {
+        console.log('1');
         const posts = await Post.findAll({
-            include: [User, Tag], // Bao gồm thông tin User và các Tag liên quan
+            // include: [User, Tag], // Bao gồm thông tin User và các Tag liên quan
         });
         res.json(posts);
     } catch (err) {
@@ -32,7 +34,6 @@ const createPost = async (req, res) => {
 
   const { title, content, tags, userId} = req.body;  // Lấy thông tin từ body
   const file = req.file;  // Lấy file từ req.file (thường là dùng multer để upload file)
-    //console.log("Received file:", file); // Kiểm tra file đã được gửi chưa
 
     if (!title || !content) {
         return res
@@ -48,11 +49,11 @@ const createPost = async (req, res) => {
     }
   try {
     // Tạo bài post mới
-    const newPost =  Post.build({
+    const newPost = await Post.create({
       title,
       content,
       userId, // gán tạm thời
-      fileUrl,
+      fileUrl: file ? `/uploads/${file.filename}` : null,
     });
 
     // Xử lý các tag và liên kết với bài post

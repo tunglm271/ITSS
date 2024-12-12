@@ -16,6 +16,15 @@ const Post = sequelize.define('Posts', {
   fileUrl: {
     type: DataTypes.STRING,  // Lưu đường dẫn file
     allowNull: true
+  },
+  commentsCount: {
+    type: DataTypes.INTEGER,
+    defaultValue: 0,
+    allowNull: false
+  },
+  userId: {
+    type: DataTypes.INTEGER,
+    allowNull: true
   }
 });
 
