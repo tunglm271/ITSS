@@ -1,6 +1,7 @@
 const Post = require("../models/Post");
 const Tag = require("../models/Tag");
 const User = require("../models/User");
+const PostTag = require("../models");
 const fs = require("fs");
 const path = require("path");
 
@@ -31,45 +32,53 @@ const getAllPosts = async (req, res) => {
 
 // Tạo bài post mới
 const createPost = async (req, res) => {
-
-  const { title, content, tags, userId} = req.body;  // Lấy thông tin từ body
-  const file = req.file;  // Lấy file từ req.file (thường là dùng multer để upload file)
-
+    const { title, content, tags, userId } = req.body; // Lấy thông tin từ body
+    const file = req.file; // Lấy file từ req.file (thường dùng multer để upload file)
+  
     if (!title || !content) {
-        return res
-            .status(400)
-            .json({ message: "Title and content are required" });
+      return res.status(400).json({ message: "Title and content are required" });
     }
-
+  
     // Kiểm tra nếu có file thì tạo đường dẫn lưu trữ
     let fileUrl = null;
     if (file) {
-        ensureUploadsDirectoryExists(); // Đảm bảo thư mục uploads tồn tại
-        fileUrl = file.path;
+      ensureUploadsDirectoryExists(); // Đảm bảo thư mục uploads tồn tại
+      fileUrl = file.path;
     }
-  try {
-    // Tạo bài post mới
-    const newPost = await Post.create({
-      title,
-      content,
-      userId, // gán tạm thời
-      fileUrl: file ? `/uploads/${file.filename}` : null,
-    });
-
-    // Xử lý các tag và liên kết với bài post
-    if (tags && tags.length > 0) {
-      const tagRecords = await Tag.findAll({ where: { name: tags } });
-      await newPost.setTags(tagRecords);  // Liên kết tags với bài post
+  
+    try {
+      // Tạo bài post mới
+      const newPost = await Post.create({
+        title,
+        content,
+        userId, 
+        fileUrl: file ? `/uploads/${file.filename}` : null,
+      });
+  
+      // Xử lý các tag và liên kết với bài post
+      if (tags && Array.isArray(tags) && tags.length > 0) {
+        for (const tagName of tags) {
+          // Tìm hoặc tạo mới tag
+          const [tag] = await Tag.findOrCreate({
+            where: { name: tagName.trim() },
+            defaults: { description: `Tag for ${tagName.trim()}` },
+          });
+  
+          // Thêm vào bảng PostTags
+          await newPost.addTag(tag);
+        }
+      }
+  
+      res.status(201).json({
+        message: "Post created successfully",
+        post: newPost,
+      });
+    } catch (err) {
+      console.error("Error in createPost:", err);
+      res.status(500).json({ message: "Server error" });
     }
-
-    await newPost.save();
-
-    res.status(201).json(newPost);
-  } catch (err) {
-    console.error('Error in createPost:', err);
-    res.status(500).json({ message: 'Server error' });
-  }
-};
+  };
+  
 
 // Lấy thông tin bài viết theo ID
 const getPostById = async (req, res) => {
