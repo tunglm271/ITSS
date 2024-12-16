@@ -137,7 +137,7 @@ export const getComments = async (postId) => {
 
 export const getMyPost = async (userId) => {
   try {
-    const response = await api.get(`/api/posts/${userId}`);
+    const response = await api.get(`/api/post/users/${userId}`);
     return response.data;
   } catch (error) {
     console.error('Error fetching my posts:', error);

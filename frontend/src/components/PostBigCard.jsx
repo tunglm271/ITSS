@@ -2,7 +2,7 @@ import React from 'react';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import EditIcon from '@mui/icons-material/Edit';
 import UploadIcon from '@mui/icons-material/Upload';
-const PostBigCard = () => {
+const PostBigCard = ({post}) => {
     const tagList = ['ITSS', "Nice", "PHP", "React"];
 
     return (
@@ -18,8 +18,8 @@ const PostBigCard = () => {
                 </div>
             </div>
 
-            <h1>JLPT N3のレベルの書き方</h1>
-            <p>fasdfasdfaskdfjasdkfjkaskdfkaskjdfkasdkfkasdjfkasfd</p>
+            <h1>{post.title}</h1>
+            <p>{post.content}</p>
             <div className='row'>
                 <div style={{display: 'flex', alignItems: 'center', gap: '5px'}}>
                     <img width="20px" height="20px" src="../src/assets/pdfIcon.svg" />

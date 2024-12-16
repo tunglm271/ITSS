@@ -1,23 +1,38 @@
-import React, { useEffect } from 'react';
-import { getUserInfor } from '../services/api';
+import React, { useEffect, useState } from 'react';
+import { getMyPost, getUserInfor } from '../services/api';
 import Header from '../components/Header';
 import AddIcon from '@mui/icons-material/Add';
 import PostBigCard from '../components/PostBigCard';
-const PersonalPage = () => {
 
+const PersonalPage = () => {
+    const [user, setUser] = useState({});
+    const [personalPost, setPersonalPost] = useState([]);
 
     useEffect(() => {
         const fetchPersonalData = async () => {
-            try {
-                const user = await getUserInfor();
-                console.log(user);
-            } catch(error) {
-                console.error('Error:', error);
-            }
-        }
-
+          try {
+            const user = await getUserInfor();
+            console.log("user", user);
+            setUser(user); 
+            fetchMyPost(user.id);
+          } catch (error) {
+            console.error('Error:', error);
+          }
+        };
+      
+        const fetchMyPost = async (userId) => {
+          try {
+            const data = await getMyPost(userId);
+            setPersonalPost(data.posts);
+            console.log("posts", data.posts);
+          } catch (error) {
+            console.error('Error:', error);
+          }
+        };
+      
         fetchPersonalData();
-    })
+      }, []);
+
 
     return (
         <div className="layout">
@@ -36,9 +51,9 @@ const PersonalPage = () => {
            </div>
 
             <div style={{display: 'flex', flexDirection: 'column', gap: '20px', marginTop: '20px'}}> 
-                 <PostBigCard />
-                 <PostBigCard />
-                 <PostBigCard />
+                 {personalPost.length && personalPost.map((post) => (
+                    <PostBigCard key={post.id} post={post} />
+                 ))}
             </div>
 
         </div>
