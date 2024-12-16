@@ -35,7 +35,7 @@ function CreatePostPopUp({ open, onClose }) {
     const [file, setFile] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
     const [user, setUser] = useState(null);
-    const tags = [];
+    const [tags, setTags] = useState([]);
     const { setPosts } = useContext(globalContext);
 
     useEffect(() => {
@@ -51,13 +51,13 @@ function CreatePostPopUp({ open, onClose }) {
             alert("タイトルと内容を入力してください。");
             return;
         }
-
+        console.log("tags", tags);
         setIsLoading(true);
         const postData = new FormData();
         postData.append("userId", user.id);
         postData.append("title", title);
         postData.append("content", description);
-        // postData.append("tags", JSON.stringify(tags)); //comment lại do đang gặp lỗi liên quan đến tag ở db
+         postData.append("tags", JSON.stringify(tags)); //comment lại do đang gặp lỗi liên quan đến tag ở db
         if (file) {
             postData.append("file", file);
         }
@@ -65,6 +65,9 @@ function CreatePostPopUp({ open, onClose }) {
         try {
             const response = await createPost(postData);
             console.log("Post created successfully:", response);
+            setTitle("");
+            setDescription("");
+            setTags([]);
 
             const data = await getPosts();
             setPosts(data);
@@ -191,6 +194,7 @@ function CreatePostPopUp({ open, onClose }) {
                                     backgroundColor: "#BDBDBD",
                                 },
                             }}
+                            onClick={() => setTags([...tags, tag])}
                         >
                             {tag}
                         </Button>
@@ -205,6 +209,19 @@ function CreatePostPopUp({ open, onClose }) {
                         <LocalOfferIcon sx={{ fontSize: "20px", color: "#333" }} />
                     </Button>
                 </Box>
+
+                <div style={{ display: "flex", alignItems: "left", marginTop: "8px", flexWrap: "wrap", alignItems: "center" }}>
+                        {tags.map((tag, index) => (
+                        <div key={index} style={{ backgroundColor: "#FFA500", color: "#333", borderRadius: "8px", padding: "4px 8px", margin: "4px 4px 0 0", display: "flex", alignItems: "center" }}>
+                            {tag}
+                            <Button
+                                onClick={() => setTags(tags.filter((item) => item !== tag))}
+                                sx={{ padding: "0 4px", minWidth: "0", minHeight: "0" }}
+                            >
+                                <CloseIcon sx={{ fontSize: "16px", color: 'black' }} />
+                            </Button>
+                        </div>))}
+                </div>
 
                 <Box
                     sx={{
