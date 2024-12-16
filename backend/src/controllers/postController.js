@@ -4,6 +4,7 @@ const User = require("../models/User");
 const PostTag = require("../models");
 const fs = require("fs");
 const path = require("path");
+const multer = require('multer');
 
 const { Op } = require("sequelize");
 
@@ -34,51 +35,61 @@ const getAllPosts = async (req, res) => {
 const createPost = async (req, res) => {
     const { title, content, tags, userId } = req.body; // Lấy thông tin từ body
     const file = req.file; // Lấy file từ req.file (thường dùng multer để upload file)
-  
+
     if (!title || !content) {
-      return res.status(400).json({ message: "Title and content are required" });
+        return res.status(400).json({ message: "Title and content are required" });
     }
-  
+
     // Kiểm tra nếu có file thì tạo đường dẫn lưu trữ
     let fileUrl = null;
     if (file) {
-      ensureUploadsDirectoryExists(); // Đảm bảo thư mục uploads tồn tại
-      fileUrl = file.path;
+        ensureUploadsDirectoryExists(); // Đảm bảo thư mục uploads tồn tại
+        fileUrl = file.path;
     }
-  
+
     try {
-      // Tạo bài post mới
-      const newPost = await Post.create({
-        title,
-        content,
-        userId, 
-        fileUrl: file ? `/uploads/${file.filename}` : null,
-      });
-  
-      // Xử lý các tag và liên kết với bài post
-      if (tags && Array.isArray(tags) && tags.length > 0) {
-        for (const tagName of tags) {
-          // Tìm hoặc tạo mới tag
-          const [tag] = await Tag.findOrCreate({
-            where: { name: tagName.trim() },
-            defaults: { description: `Tag for ${tagName.trim()}` },
-          });
-  
-          // Thêm vào bảng PostTags
-          await newPost.addTag(tag);
+        // Tạo bài post mới
+        const newPost = await Post.create({
+            title,
+            content,
+            userId,
+            fileUrl: file ? `/uploads/${file.filename}` : null,
+        });
+
+        // Xử lý các tag và liên kết với bài post
+        if (tags) {
+            // Nếu tags là chuỗi JSON, parse nó thành mảng
+            let tagArray = [];
+            try {
+                tagArray = JSON.parse(tags);
+            } catch (e) {
+                console.error('Error parsing tags:', e);
+                return res.status(400).json({ message: 'Invalid format for tags' });
+            }
+
+            // Kiểm tra nếu tagArray là mảng
+            if (Array.isArray(tagArray) && tagArray.length > 0) {
+                for (const tagName of tagArray) {
+                    const [tag] = await Tag.findOrCreate({
+                        where: { name: tagName.trim() },
+                        defaults: { description: `Tag for ${tagName.trim()}` },
+                    });
+
+                    await newPost.addTag(tag);
+                }
+            }
         }
-      }
-  
-      res.status(201).json({
-        message: "Post created successfully",
-        post: newPost,
-      });
+
+        res.status(201).json({
+            message: "Post created successfully",
+            post: newPost,
+        });
     } catch (err) {
-      console.error("Error in createPost:", err);
-      res.status(500).json({ message: "Server error" });
+        console.error("Error in createPost:", err);
+        res.status(500).json({ message: "Server error" });
     }
-  };
-  
+};
+
 
 // Lấy thông tin bài viết theo ID
 const getPostById = async (req, res) => {
@@ -157,44 +168,44 @@ const deletePost = async (req, res) => {
 };
 
 const searchPosts = async (req, res) => {
-  const { query } = req.query;
+    const { query } = req.query;
 
-  if (!query) {
-      return res.status(400).json({ message: "Query parameter is required" });
-  }
+    if (!query) {
+        return res.status(400).json({ message: "Query parameter is required" });
+    }
 
-  try {
-      // Tìm kiếm chính xác theo tiêu đề
-      const exactMatches = await Post.findAll({
-          where: {
-              title: query, // So khớp chính xác
-          },
-          include: [User, Tag],
-      });
+    try {
+        // Tìm kiếm chính xác theo tiêu đề
+        const exactMatches = await Post.findAll({
+            where: {
+                title: query, // So khớp chính xác
+            },
+            include: [User, Tag],
+        });
 
-      // Nếu tìm thấy bài viết chính xác, trả về
-      if (exactMatches.length > 0) {
-          return res.json(exactMatches);
-      }
+        // Nếu tìm thấy bài viết chính xác, trả về
+        if (exactMatches.length > 0) {
+            return res.json(exactMatches);
+        }
 
-      // Tìm kiếm chứa từ khóa
-      const likeMatches = await Post.findAll({
-          where: {
-              [Op.or]: [
-                  { title: { [Op.like]: `%${query}%` } },
-                  { content: { [Op.like]: `%${query}%` } },
-              ],
-          },
-          include: [User, Tag],
-      });
+        // Tìm kiếm chứa từ khóa
+        const likeMatches = await Post.findAll({
+            where: {
+                [Op.or]: [
+                    { title: { [Op.like]: `%${query}%` } },
+                    { content: { [Op.like]: `%${query}%` } },
+                ],
+            },
+            include: [User, Tag],
+        });
 
-      // Trả về kết quả tìm kiếm, dù có bài viết hay không
-      res.json(likeMatches);
+        // Trả về kết quả tìm kiếm, dù có bài viết hay không
+        res.json(likeMatches);
 
-  } catch (err) {
-      console.error("Error in searchPosts:", err);
-      res.status(500).json({ message: "Server error" });
-  }
+    } catch (err) {
+        console.error("Error in searchPosts:", err);
+        res.status(500).json({ message: "Server error" });
+    }
 };
 
 

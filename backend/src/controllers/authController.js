@@ -4,7 +4,6 @@ const jwt = require('jsonwebtoken');
 const multer = require('multer');
 
 // Cấu hình multer để xử lý dữ liệu từ form (không có file)
-const upload = multer();
 
 // Register user
 exports.register = async (req, res, next) => {
