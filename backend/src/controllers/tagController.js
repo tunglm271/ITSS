@@ -1,4 +1,7 @@
-const { Tag, Post, User } = require('../models'); // Đảm bảo đường dẫn tới model Tag đúng
+const { Tag, Post, User  } = require('../models'); // Đảm bảo đường dẫn tới model Tag đúng
+
+const { Op } = require("sequelize");
+
 
 const getAllTags = async (req, res) => {
   try {
@@ -27,6 +30,8 @@ const createTag = async (req, res) => {
     res.status(500).json({ message: 'Internal server error' });
   }
 };
+
+
 
 const getAllPostbyUserId = async (req, res) => {
   try {
@@ -75,8 +80,38 @@ const getAllPostbyUserId = async (req, res) => {
     return res.status(500).json({ message: 'Internal server error', error: error.message });
   }
 };
+const findTags = async (req, res) => {
+  const { name } = req.params;  
+
+  if (!name) {
+      return res.status(400).json({ message: "Name query parameter is required" });
+  }
+
+  try {
+      const exactMatches = await Tag.findAll({
+          where: {
+              name: name, 
+          },
+      });
+
+      if (exactMatches.length > 0) {
+          return res.status(200).json(exactMatches);
+      }
+      const likeMatches = await Tag.findAll({
+          where: {
+              name: { [Op.like]: `%${name}%` },  
+          },
+      });
+      res.status(200).json(likeMatches);
+
+  } catch (err) {
+      console.error("Error finding tag:", err);
+      res.status(500).json({ message: "Internal server error" });
+  }
+};
 module.exports = {
   getAllTags,
   getAllPostbyUserId,
   createTag,
+  findTags,
 };
