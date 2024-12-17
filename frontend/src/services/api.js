@@ -155,4 +155,15 @@ export const createTag = async (tagData) => {
   }
 }
 
+
+export const getTags = async () => {
+  try {
+    const response = await api.get('/api/tags');
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching tags:', error);
+    throw error;
+  }
+}
+
 export default api;

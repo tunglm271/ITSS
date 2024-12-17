@@ -5,17 +5,30 @@ import DialogActions from "@mui/material/DialogActions";
 import Button from "@mui/material/Button";
 import PropTypes from "prop-types";
 import TextField from "@mui/material/TextField";
-import Avatar from "@mui/material/Avatar";
 import Box from "@mui/material/Box";
 import CloseIcon from "@mui/icons-material/Close";
-import AddIcon from "@mui/icons-material/Add";
-import LocalOfferIcon from "@mui/icons-material/LocalOffer";
-import FileCopyIcon from "@mui/icons-material/FileCopy";
+import { createTag } from "../services/api";
+import { useState } from "react";
 
 function CreatePostPopUp({ open, onClose }) {
+    const [tagName, setTagName] = useState("");
+    const [description, setDescription] = useState("");
 
     const handleSubmitTag = () => {
+        const createTagRequest = async () => {
+            try {
+                const tag = await createTag({
+                    name: tagName,
+                    description: description
+                });
+                console.log("tag", tag);
+            } catch (error) {
+                console.error("Error:", error);
+            }
+        }
 
+        createTagRequest();
+        onClose();
     }
 
 
@@ -56,6 +69,7 @@ function CreatePostPopUp({ open, onClose }) {
                             label="タグ名"
                             variant="outlined"
                             fullWidth
+                            onChange={(e) => setTagName(e.target.value)}
                         />
                         <TextField
                             label="タグの説明"
@@ -63,6 +77,7 @@ function CreatePostPopUp({ open, onClose }) {
                             fullWidth
                             multiline
                             rows={4}
+                            onChange={(e) => setDescription(e.target.value)}
                         />
                     </Box>
             </DialogContent>
