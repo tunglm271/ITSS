@@ -22,6 +22,9 @@ function Login() {
       const response = await loginRequest(loginData);
       console.log(response);
       localStorage.setItem('token', response.token);
+      setTimeout(() => {
+        localStorage.removeItem('token');
+      }, 3600000); // 1 hour in milliseconds
       navigate('/');
     } catch (error) {
       console.error('Error logging in:', error);
