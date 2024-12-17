@@ -3,10 +3,25 @@ const { Tag, Post, User  } = require('../models'); // Đảm bảo đường d�
 const { Op } = require("sequelize");
 
 
+
 const getAllTags = async (req, res) => {
   try {
-    const tags = await Tag.findAll();
-    res.status(200).json(tags);
+    const tags = await Tag.findAll({
+      include: [{
+        model: Post,
+        through: { attributes: [] },  
+        attributes: [],  
+      }],
+    });
+    const tagsWithPostCount = await Promise.all(tags.map(async (tag) => {
+      const postCount = await tag.countPosts();  
+      return {
+        ...tag.toJSON(),
+        postCount,  
+      };
+    }));
+    res.status(200).json(tagsWithPostCount);
+    
   } catch (error) {
     console.error('Error fetching tags:', error);
     res.status(500).json({ message: 'Internal server error' });

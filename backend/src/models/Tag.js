@@ -12,7 +12,7 @@ const Tag = sequelize.define('Tag', {
     allowNull: true
   }
 },{
-  timestamps: false
+  timestamps: true
 });
 
 
