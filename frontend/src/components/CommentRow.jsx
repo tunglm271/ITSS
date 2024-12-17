@@ -3,6 +3,7 @@ import { deepOrange } from '@mui/material/colors';
 import React from 'react';
 
 const CommentRow = ({comment}) => {
+    console.log(comment);
     return (
         <div style={{display: 'flex', gap: '10px', alignItems: 'center'}}>
             <Avatar sx={{ bgcolor: deepOrange[500] }}>U</Avatar>

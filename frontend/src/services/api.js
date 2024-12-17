@@ -145,4 +145,14 @@ export const getMyPost = async (userId) => {
   }
 }
 
+export const createTag = async (tagData) => {
+  try {
+    const response = await api.post('/api/tags', tagData);
+    return response.data;
+  } catch (error) {
+    console.error('Error creating tag:', error);
+    throw error;
+  }
+}
+
 export default api;

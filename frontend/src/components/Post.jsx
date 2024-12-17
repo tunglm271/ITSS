@@ -4,13 +4,12 @@ import { Link } from 'react-router-dom';
 
 function Post({ post }) {
   const fileServer = 'http://localhost:5000/';
-  const tagList = ['ITSS', "Nice", "PHP", "React"];
 
   return (
     <div className="post-card">
       <div style={{ display: 'flex', justifyContent: 'space-between' }}>
         <div className="tag-list">
-          {tagList.map((tag, index) => (
+          {post.tags.map((tag, index) => (
             <Tag key={index} tag={tag} />
           ))}
         </div>
