@@ -10,12 +10,29 @@ const getAllTags = async (req, res) => {
   }
 };
 
+const createTag = async (req, res) => {
+  try {
+    const { name, description } = req.body;
+    if (!name) {
+      return res.status(400).json({ message: 'Name is required' });
+    }
+    const newTag = await Tag.create({
+      name,
+      description,
+    });
+
+    res.status(201).json(newTag);
+  } catch (error) {
+    console.error('Error creating tag:', error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+};
 
 const getAllPostbyUserId = async (req, res) => {
   try {
-    const { userId } = req.params; 
+    const { userId } = req.params;
     const user = await User.findByPk(userId);
-    
+
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
     }
@@ -61,4 +78,5 @@ const getAllPostbyUserId = async (req, res) => {
 module.exports = {
   getAllTags,
   getAllPostbyUserId,
+  createTag,
 };
