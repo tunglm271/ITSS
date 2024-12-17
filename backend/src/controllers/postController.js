@@ -17,14 +17,29 @@ const ensureUploadsDirectoryExists = () => {
 };
 
 // Lấy tất cả bài viết
+
 const getAllPosts = async (req, res) => {
     console.log('0');
     try {
         console.log('1');
         const posts = await Post.findAll({
-            // include: [User, Tag], // Bao gồm thông tin User và các Tag liên quan
+            include: [{
+                model: Tag,  
+                through: { attributes: [] }, 
+                attributes: ['name'], 
+            }]
         });
-        res.json(posts);
+        const formattedPosts = posts.map(post => {
+           
+            const tags = post.Tags.map(tag => tag.name);
+            const { Tags, ...postData } = post.toJSON(); 
+            return {
+                ...postData,
+                tags
+            };
+        });
+
+        res.json(formattedPosts);
     } catch (err) {
         console.error("Error in getAllPosts:", err);
         res.status(500).json({ message: "Server error" });
