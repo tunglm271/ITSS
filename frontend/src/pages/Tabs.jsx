@@ -1,11 +1,29 @@
 import { Avatar, Badge } from '@mui/material';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone';
 import PublicIcon from '@mui/icons-material/Public';
 import LogoutIcon from '@mui/icons-material/Logout';
 import TagHeader from '../components/TagHeader';
 import TagCard from '../components/TagCard';
+import { getTags } from '../services/api';
 const Tabs = () => {
+
+    const [tags, setTags] = useState([]);
+
+    useEffect(() => {
+        const fetchTags = async () => {
+            try {
+                const data = await getTags();
+                setTags(data);
+                console.log(data);
+            } catch (error) {
+                console.error('Error fetching tags:', error);
+            }
+        };
+
+        fetchTags();
+    },[]);
+
     const [order, setOrder] = useState('popular');
 
     return (
@@ -34,13 +52,10 @@ const Tabs = () => {
                 
             </div>
 
-            <TagHeader order={order} setOrder={setOrder}/>
+            <TagHeader order={order} setOrder={setOrder} setTags={setTags}/>
 
             <div id="tag-grid">
-                <TagCard />
-                <TagCard />
-                <TagCard />
-                <TagCard />
+                {tags.length && tags.map((tag,index) => <TagCard key={index} tag={tag}/>)}
             </div>
 
         </div>

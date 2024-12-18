@@ -145,4 +145,34 @@ export const getMyPost = async (userId) => {
   }
 }
 
+export const createTag = async (tagData) => {
+  try {
+    const response = await api.post('/api/tags', tagData);
+    return response.data;
+  } catch (error) {
+    console.error('Error creating tag:', error);
+    throw error;
+  }
+}
+
+export const getTags = async () => {
+  try {
+    const response = await api.get('/api/tags');
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching tags:', error);
+    throw error;
+  }
+}
+
+export const findTags = async (query) => {
+  try {
+    const response = await api.get('/api/findtags/' + query);
+    return response.data;
+  } catch (error) {
+    console.error('Error finding tags:', error);
+    throw error;
+  }
+}
+
 export default api;

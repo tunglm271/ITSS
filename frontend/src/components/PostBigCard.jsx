@@ -9,7 +9,7 @@ const PostBigCard = ({post}) => {
         <div className='post-big-card'>
             <div className='row'>
                 <div style={{display: 'flex', gap: '20px', alignItems: 'center', width: '100%'}}>
-                    {tagList.map((tag, index) => <div key={index} className='tag'>{tag}</div> )}
+                    {post.tags.map((tag, index) => <div key={index} className='tag'>{tag}</div> )}
                     9
                     <VisibilityIcon />
                     <button style={{marginLeft: 'auto', border: 'none'}} className='edit-btn'>
