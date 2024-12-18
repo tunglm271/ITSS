@@ -124,9 +124,54 @@ const findTags = async (req, res) => {
       res.status(500).json({ message: "Internal server error" });
   }
 };
+
+const getPostsByTag = async (req, res) => {
+  const { tagName } = req.params; 
+
+  if (!tagName) {
+    return res.status(400).json({ message: "Tag name is required" });
+  }
+
+  try {
+    const tag = await Tag.findOne({
+      where: { name: tagName },  
+      include: [{
+        model: Post,
+        through: { attributes: [] },  
+        attributes: ['id', 'title', 'content', 'fileUrl', 'userId', 'createdAt', 'updatedAt'], 
+        include: [{
+          model: Tag,  
+          through: { attributes: [] },  
+          attributes: ['name'],  
+        }]
+      }],
+    });
+
+    if (!tag) {
+      return res.status(404).json({ message: "Tag not found" });
+    }
+
+    const postsWithTags = tag.Posts.map(post => {
+      // Lấy mảng các tag liên kết với bài viết
+      const tags = post.Tags.map(tag => tag.name);  
+      const { Tags, ...postData } = post.toJSON(); 
+      return {
+        ...postData,
+        tags  
+      };
+    });
+
+    res.status(200).json(postsWithTags);
+
+  } catch (err) {
+    console.error("Error fetching posts by tag:", err);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
 module.exports = {
   getAllTags,
   getAllPostbyUserId,
   createTag,
   findTags,
+  getPostsByTag,
 };
