@@ -17,6 +17,10 @@ const Post = sequelize.define('Posts', {
     type: DataTypes.STRING,  // Lưu đường dẫn file
     allowNull: true
   },
+  formUrl: {
+    type: DataTypes.STRING,  // Lưu đường dẫn form 
+    allowNull: true
+  },
   commentsCount: {
     type: DataTypes.INTEGER,
     defaultValue: 0,

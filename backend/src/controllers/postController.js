@@ -48,7 +48,7 @@ const getAllPosts = async (req, res) => {
 
 // Tạo bài post mới
 const createPost = async (req, res) => {
-    const { title, content, tags, userId } = req.body; // Lấy thông tin từ body
+    const { title, content, tags, userId, formUrl} = req.body; // Lấy thông tin từ body
     const file = req.file; // Lấy file từ req.file (thường dùng multer để upload file)
 
     if (!title || !content) {
@@ -68,6 +68,7 @@ const createPost = async (req, res) => {
             title,
             content,
             userId,
+            formUrl,
             fileUrl: file ? `/uploads/${file.filename}` : null,
         });
 

@@ -60,7 +60,7 @@ const getAllPostbyUserId = async (req, res) => {
     // Lấy tất cả bài viết của người dùng cùng với các tag liên quan
     const posts = await Post.findAll({
       where: { userId },
-      attributes: ['id', 'title', 'content', 'fileUrl', 'commentsCount', 'createdAt', 'updatedAt'],
+      attributes: ['id', 'title', 'content', 'fileUrl','formUrl' ,'commentsCount', 'createdAt', 'updatedAt'],
       include: [{
         model: Tag,  // Bao gồm thông tin từ bảng Tag
         through: { attributes: [] }, // Không lấy thông tin từ bảng trung gian (PostTag)
@@ -138,7 +138,7 @@ const getPostsByTag = async (req, res) => {
       include: [{
         model: Post,
         through: { attributes: [] },  
-        attributes: ['id', 'title', 'content', 'fileUrl', 'userId', 'createdAt', 'updatedAt'], 
+        attributes: ['id', 'title', 'content', 'fileUrl', 'userId', 'formUrl', 'createdAt', 'updatedAt'], 
         include: [{
           model: Tag,  
           through: { attributes: [] },  
