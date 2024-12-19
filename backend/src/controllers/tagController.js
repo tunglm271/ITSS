@@ -161,7 +161,14 @@ const getPostsByTag = async (req, res) => {
       };
     });
 
-    res.status(200).json(postsWithTags);
+    res.status(200).json({
+      tags: {
+        id: tag.id,
+        name: tag.name,
+        description: tag.description
+      },
+      post : postsWithTags
+    });
 
   } catch (err) {
     console.error("Error fetching posts by tag:", err);
