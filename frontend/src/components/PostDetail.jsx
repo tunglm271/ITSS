@@ -10,6 +10,7 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import ArrowCircleUpIcon from '@mui/icons-material/ArrowCircleUp';
 import ArrowCircleDownIcon from '@mui/icons-material/ArrowCircleDown';
 import StarBorderIcon from '@mui/icons-material/StarBorder';
+import StarIcon from '@mui/icons-material/Star';
 import ChatBubbleOutlineIcon from '@mui/icons-material/ChatBubbleOutline';
 import ReplyIcon from '@mui/icons-material/Reply';
 import SendIcon from '@mui/icons-material/Send';
@@ -22,7 +23,7 @@ function PostDetail({post, id}) {
 
     const [user, setUser] = useState({});
     const [comments, setComments] = useState([]);
-
+    const [like, setLike] = useState(false);
     const fetchComments = async () => {
         console.log(post);
         try {
@@ -48,12 +49,16 @@ function PostDetail({post, id}) {
         fetchUser();
     },[])
 
+    useEffect(() => {
+        console.log(like);
+    }, [like])
 
     const [myComment, setMyComment] = useState('');
     const fileServer = 'http://localhost:5000';
 
     const tagList = ['ITSS', "Nice", "PHP", "React"];
 
+    console.log(post);
 
     const sendComment = () => {
         const commentData = {
@@ -119,19 +124,24 @@ function PostDetail({post, id}) {
                     <div className='post-detail'>
                         <div style={{marginBottom: '10px', display: 'flex', justifyContent: 'space-between', zIndex: '50'}}>
                             <div className='tag-list'>
-                                {tagList.map((tag, index) => <Tag key={index} tag={tag} />)}
+                                {post.Tags && post.Tags.map((tag, index) => <Tag key={index} tag={tag.name} />)}
                                 <VisibilityIcon />
                                 9
                             </div>
                         </div>
                         <h1>{post.title}</h1>
                         <p>{post.content}</p>
-                        
+                        <Link to={post.formUrl} style={{display: 'inline-block', marginBottom: '20px', color: 'white', textDecoration: 'none', background: '#FFA500', padding: '5px 20px', borderRadius: '5px'}}>Link</Link>
+                        <br />
+
                         <span><img width="40px" height="40px" src="../src/assets/pdfIcon.svg" /><Link to={fileServer + post.fileUrl}>demo.pdf</Link></span>
 
                         <div id='action-list'>
                             <div className='action-btn' style={{width: '34%', justifyContent: 'center', padding: '3px 0', display: 'flex', alignItems: 'center'}}>
-                                <StarBorderIcon />
+                            {like ? 
+                                <StarIcon onClick={() => setLike(!like)} /> : 
+                                <StarBorderIcon onClick={() => setLike(!like)} color='yellow' />
+                            }
                             </div>
 
                             <div className='action-btn' style={{width: '34%', justifyContent: 'center', padding: '3px 0', display: 'flex', alignItems: 'center'}}>

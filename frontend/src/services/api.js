@@ -175,4 +175,15 @@ export const findTags = async (query) => {
   }
 }
 
+
+export const getPostInTag = async (tagName) => {
+  try {
+    const response = await api.get(`/api/tags/${tagName}`);
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching posts in tag:', error);
+    throw error;
+  }
+}
+
 export default api;

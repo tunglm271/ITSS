@@ -10,8 +10,8 @@ sequelize.authenticate()
   .then(() => {
     console.log('Database connected...');
     // Sync models
-    // sequelize.sync({force: true })
-     sequelize.sync()
+    sequelize.sync({force: true })
+    //sequelize.sync()
       .then(() => {
         console.log('All models were synchronized successfully.');
         // Khởi động server sau khi kết nối và sync thành công
@@ -26,3 +26,6 @@ sequelize.authenticate()
   .catch(err => {
     console.error('Unable to connect to the database:', err);
   });
+
+  // Additional logging to check if the server is starting
+console.log('Attempting to start the server...');

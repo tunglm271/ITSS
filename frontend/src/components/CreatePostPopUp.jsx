@@ -15,7 +15,7 @@ import { styled } from "@mui/material/styles";
 import { useContext, useState, useEffect } from "react";
 import { createPost, getPosts, getUserInfor } from "../services/api";
 import { globalContext } from "../App";
-
+import { getTags } from "../services/api";
 const VisuallyHiddenInput = styled("input")({
     clip: "rect(0 0 0 0)",
     clipPath: "inset(50%)",
@@ -36,6 +36,9 @@ function CreatePostPopUp({ open, onClose }) {
     const [isLoading, setIsLoading] = useState(false);
     const [user, setUser] = useState(null);
     const [tags, setTags] = useState([]);
+    const [tagList, setTagList] = useState([]);
+    const [toggleAddLink, setToggleAddLink] = useState(false);
+    const [link, setLink] = useState("");
     const { setPosts } = useContext(globalContext);
 
     useEffect(() => {
@@ -43,7 +46,15 @@ function CreatePostPopUp({ open, onClose }) {
             const user = await getUserInfor();
             setUser(user);
         };
+
+        const fetchTags = async () => {
+            const tags = await getTags();
+            console.log("tags", tags);
+            setTagList(tags);
+        };
+
         fetchUser();
+        fetchTags();
     }, []);
 
     const handleSubmitPost = async () => {
@@ -56,6 +67,7 @@ function CreatePostPopUp({ open, onClose }) {
         const postData = new FormData();
         postData.append("userId", user.id);
         postData.append("title", title);
+        postData.append("formUrl", link);
         postData.append("content", description);
          postData.append("tags", JSON.stringify(tags)); //comment lại do đang gặp lỗi liên quan đến tag ở db
         if (file) {
@@ -72,6 +84,7 @@ function CreatePostPopUp({ open, onClose }) {
             const data = await getPosts();
             setPosts(data);
             onClose();
+            setToggleAddLink(false);
         } catch (error) {
             console.error("Error creating post:", error);
             alert("投稿の作成中にエラーが発生しました。");
@@ -161,6 +174,19 @@ function CreatePostPopUp({ open, onClose }) {
                     }}
                 />
 
+                {toggleAddLink?
+                    <TextField 
+                        placeholder="https://example.com"
+                        onChange={(event) => setLink(event.target.value)}
+                        sx={{
+                            width: "100%",
+                            marginTop: "8px",
+                        }}
+
+                    />:
+                    <Button onClick={() => setToggleAddLink(true)}>リンク追加</Button>
+                }   
+
                 <Box
                     sx={{
                         marginTop: "8px",
@@ -180,7 +206,7 @@ function CreatePostPopUp({ open, onClose }) {
                         borderRadius: "8px",
                     }}
                 >
-                    {["PHP", "MongoDB", "データベース", "NodeJS", "Javascript"].map((tag, index) => (
+                    {tagList.slice(1,6).map((tag, index) => (
                         <Button
                             key={index}
                             variant="outlined"
@@ -194,9 +220,9 @@ function CreatePostPopUp({ open, onClose }) {
                                     backgroundColor: "#BDBDBD",
                                 },
                             }}
-                            onClick={() => setTags([...tags, tag])}
+                            onClick={() => setTags([...tags, tag.name])}
                         >
-                            {tag}
+                            {tag.name}
                         </Button>
                     ))}
 

@@ -2,11 +2,21 @@ import React from 'react';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import EditIcon from '@mui/icons-material/Edit';
 import UploadIcon from '@mui/icons-material/Upload';
+import { useNavigate } from 'react-router-dom';
+
 const PostBigCard = ({post}) => {
-    const tagList = ['ITSS', "Nice", "PHP", "React"];
+   const navigate = useNavigate();
+
+    const formatDate = (dateString) => {
+        const date = new Date(dateString);
+        const year = date.getFullYear();
+        const month = date.getMonth() + 1; // Tháng trong JS bắt đầu từ 0
+        const day = date.getDate();
+        return `${year}年${month}月${day}日`;
+    };
 
     return (
-        <div className='post-big-card'>
+        <div className='post-big-card' onClick={() => navigate(`/posts/${post._id}`)}>
             <div className='row'>
                 <div style={{display: 'flex', gap: '20px', alignItems: 'center', width: '100%'}}>
                     {post.tags.map((tag, index) => <div key={index} className='tag'>{tag}</div> )}
@@ -26,7 +36,7 @@ const PostBigCard = ({post}) => {
                     <a href="https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf">demo.pdf</a>
                 </div>
 
-                <span style={{display: 'flex', alignItems: 'center', gap: '3px'}}>2024年3月9日 <UploadIcon /></span>
+                <span style={{display: 'flex', alignItems: 'center', gap: '3px'}}>{formatDate(post.createdAt)} <UploadIcon /></span>
             </div>
         </div>
     );
