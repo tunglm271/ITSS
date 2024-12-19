@@ -11,7 +11,7 @@ sequelize.authenticate()
     console.log('Database connected...');
     // Sync models
     // sequelize.sync({force: true })
-      sequelize.sync()
+    sequelize.sync()
       .then(() => {
         console.log('All models were synchronized successfully.');
         // Khởi động server sau khi kết nối và sync thành công
