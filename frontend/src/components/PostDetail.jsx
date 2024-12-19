@@ -19,6 +19,7 @@ import { useEffect, useState } from 'react';
 import { createComment, getUserInfor } from '../services/api';
 import CommentRow from './CommentRow';
 import { getComments } from '../services/api';
+import UploadIcon from '@mui/icons-material/Upload';
 function PostDetail({post, id}) {
 
     const [user, setUser] = useState({});
@@ -34,6 +35,13 @@ function PostDetail({post, id}) {
         }
     }
 
+    const formatDate = (dateString) => {
+        const date = new Date(dateString);
+        const year = date.getFullYear();
+        const month = date.getMonth() + 1; // Tháng trong JS bắt đầu từ 0
+        const day = date.getDate();
+        return `${year}年${month}月${day}日`;
+    };
 
     useEffect(() => {
         const fetchUser = async () => {
@@ -152,6 +160,15 @@ function PostDetail({post, id}) {
                                 <ReplyIcon />
                             </div>
                         </div>
+                        
+                        <div style={{width: '100%', display: 'flex', justifyContent: 'left', alignItems: 'center', gap: '10px', marginTop: '20px'}}>
+                            <div className='author-box'>
+                                <Avatar alt='avatar' src='https://s3-alpha-sig.figma.com/img/7725/9698/379a6812cb19259fb7ef359b6da622f2?Expires=1734912000&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=RKSYIxbTGWdeQoMO8Zikm3VqB3TuCutSdWRh2hGpHIC0e3R0kYK2tAMmStkhbVFM9DLaPj3lb44X-SROk4ksVtslgpWwaWwWs18Cr~Ukp-JFKJcCxOTBSNZ2olFtUnNUufLdc-o7RDqjdWfZvCR0yy6KDudX71jJ-zLj2XhmvdRi1Gq8MrgefkbwSct2JZ-vMrfZxdBZFio7ZOKIFCPJnRCt-5UsETm5bLtWbKqhp3LBa5TZESffNc4l2S3IJ~oZiWRhsr2wV2mS2qj7PYuhNWy62PWDhF1BsuO34AYvKzVHXrhV~MAMDYYlL2dyuVQN9-qT9-O5JbLVc0YGe1I5-A__' />
+                                {post.User && <h3>{post.User.name}</h3>}
+                            </div>
+                            <h4 style={{display: 'flex', gap: '5px'}}><UploadIcon />{formatDate(post.createdAt)}</h4>
+                        </div>
+
                     </div>
             </div>
             
