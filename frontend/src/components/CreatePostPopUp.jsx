@@ -206,7 +206,7 @@ function CreatePostPopUp({ open, onClose }) {
                         borderRadius: "8px",
                     }}
                 >
-                    {tagList.slice(1,6).map((tag, index) => (
+                    {tagList.slice(0,6).map((tag, index) => (
                         <Button
                             key={index}
                             variant="outlined"
