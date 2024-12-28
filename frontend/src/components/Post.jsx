@@ -34,10 +34,11 @@ function Post({ post }) {
 
 Post.propTypes = {
   post: PropTypes.shape({
-    id: PropTypes.number.isRequired,
-    title: PropTypes.string.isRequired,
-    content: PropTypes.string.isRequired,
-    fileUrl: PropTypes.string, // Thêm trường fileUrl
+     id: PropTypes.number.isRequired,
+     title: PropTypes.string.isRequired,
+     content: PropTypes.string.isRequired,
+     fileUrl: PropTypes.string, // fileUrl is optional
+     tags: PropTypes.arrayOf(PropTypes.string), // Validate tags as an array of strings
   }).isRequired,
 };
 

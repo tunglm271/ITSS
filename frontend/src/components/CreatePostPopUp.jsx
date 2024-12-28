@@ -236,7 +236,7 @@ function CreatePostPopUp({ open, onClose }) {
                     </Button>
                 </Box>
 
-                <div style={{ display: "flex", alignItems: "left", marginTop: "8px", flexWrap: "wrap", alignItems: "center" }}>
+                <div style={{ display: "flex", marginTop: "8px", flexWrap: "wrap", alignItems: "center" }}>
                         {tags.map((tag, index) => (
                         <div key={index} style={{ backgroundColor: "#FFA500", color: "#333", borderRadius: "8px", padding: "4px 8px", margin: "4px 4px 0 0", display: "flex", alignItems: "center" }}>
                             {tag}

@@ -64,6 +64,7 @@ function Header() {
                     type="text"
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
+                    placeholder="Search for posts"
                 />
                 <button onClick={handleSearch}>
                     <SearchIcon />
@@ -88,17 +89,19 @@ function Header() {
                 <DialogTitle>Search Results</DialogTitle>
                 <DialogContent>
                     {searchResults.length > 0
-                        ? searchResults.map((post) => (
-                              <Post key={post.id} post={post} />
+                        ? searchResults.map((post, index) => (
+                              <Post key={index} post={post} />
                           ))
                         : notFound && (
-                            <p style={{
-                                color: "red", 
-                                fontWeight: "bold", 
-                                textAlign: "center", 
-                                padding: "20px", 
-                                backgroundColor: "#ffe6e6"
-                            }}>
+                              <p
+                                  style={{
+                                      color: "red",
+                                      fontWeight: "bold",
+                                      textAlign: "center",
+                                      padding: "20px",
+                                      backgroundColor: "#ffe6e6",
+                                  }}
+                              >
                                   No results found for &quot;{searchQuery}&quot;
                               </p>
                           )}

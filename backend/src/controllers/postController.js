@@ -196,15 +196,27 @@ const searchPosts = async (req, res) => {
             where: {
                 title: query, // So khớp chính xác
             },
-            include: [User, Tag],
+            include: [{
+                model: Tag,  
+                through: { attributes: [] }, // Không lấy thông tin về bảng trung gian (PostTag)
+                attributes: ['name'], // Lấy tên của tag
+            }]
         });
 
         // Nếu tìm thấy bài viết chính xác, trả về
         if (exactMatches.length > 0) {
-            return res.json(exactMatches);
+            const formattedPosts = exactMatches.map(post => {
+                const tags = post.Tags.map(tag => tag.name); // Lấy danh sách tên tags
+                const { Tags, ...postData } = post.toJSON(); // Loại bỏ thông tin Tags không cần thiết
+                return {
+                    ...postData,
+                    tags, // Thêm tags vào kết quả
+                };
+            });
+            return res.json(formattedPosts);
         }
 
-        // Tìm kiếm chứa từ khóa
+        // Tìm kiếm chứa từ khóa trong tiêu đề hoặc nội dung
         const likeMatches = await Post.findAll({
             where: {
                 [Op.or]: [
@@ -212,11 +224,24 @@ const searchPosts = async (req, res) => {
                     { content: { [Op.like]: `%${query}%` } },
                 ],
             },
-            include: [User, Tag],
+            include: [{
+                model: Tag,  
+                through: { attributes: [] }, // Không lấy thông tin về bảng trung gian (PostTag)
+                attributes: ['name'], // Lấy tên của tag
+            }]
         });
 
-        // Trả về kết quả tìm kiếm, dù có bài viết hay không
-        res.json(likeMatches);
+        // Xử lý và trả về kết quả tìm kiếm
+        const formattedLikeMatches = likeMatches.map(post => {
+            const tags = post.Tags.map(tag => tag.name); // Lấy danh sách tên tags
+            const { Tags, ...postData } = post.toJSON(); // Loại bỏ thông tin Tags không cần thiết
+            return {
+                ...postData,
+                tags, // Thêm tags vào kết quả
+            };
+        });
+
+        res.json(formattedLikeMatches);
 
     } catch (err) {
         console.error("Error in searchPosts:", err);
