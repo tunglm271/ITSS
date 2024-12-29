@@ -100,7 +100,7 @@ function CreatePostPopUp({ open, onClose }) {
     };
 
     return (
-        <Dialog open={open} onClose={onClose} fullWidth maxWidth="sm" sx={{ minHeight: "500px" }}>
+        <Dialog open={open} onClose={onClose} fullWidth maxWidth="md" sx={{ minHeight: "500px" }}>
             <DialogTitle sx={{ padding: 0, borderBottom: "none" }}>
                 <Box sx={{ position: "relative", textAlign: "center", paddingTop: "5px" }}>
                     <Box sx={{ fontSize: "25px", fontWeight: "bold" }}>ポスト作成</Box>
@@ -158,18 +158,24 @@ function CreatePostPopUp({ open, onClose }) {
                 <TextField
                     placeholder="何を考えている?..."
                     multiline
-                    rows={10}
+                    maxRows={50}
                     value={description}
                     onChange={(event) => setDescription(event.target.value)}
                     variant="outlined"
                     fullWidth
                     sx={{
-                        height: "120px",
+                        height: "200px",
+                        overflowY: "auto",
                         "& .MuiOutlinedInput-root": {
                             borderRadius: 0,
                             "& fieldset": {
                                 border: "none",
                             },
+                            "&::-webkit-scrollbar": {
+                                display: "none !important",
+                            },
+                            "-ms-overflow-style": "none",
+                            "scrollbar-width": "none",
                         },
                     }}
                 />

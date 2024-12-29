@@ -16,7 +16,7 @@ const PostBigCard = ({post}) => {
     };
 
     return (
-        <div className='post-big-card' onClick={() => navigate(`/posts/${post._id}`)}>
+        <div className='post-big-card' onClick={() => navigate(`/posts/${post.id}`)}>
             <div className='row'>
                 <div style={{display: 'flex', gap: '20px', alignItems: 'center', width: '100%'}}>
                     {post.tags.map((tag, index) => <div key={index} className='tag'>{tag}</div> )}
