@@ -39,6 +39,7 @@ function CreatePostPopUp({ open, onClose }) {
     const [tagList, setTagList] = useState([]);
     const [toggleAddLink, setToggleAddLink] = useState(false);
     const [link, setLink] = useState("");
+    const [viewAllTag, setViewAllTag] = useState(false);
     const { setPosts } = useContext(globalContext);
 
     useEffect(() => {
@@ -212,7 +213,27 @@ function CreatePostPopUp({ open, onClose }) {
                         borderRadius: "8px",
                     }}
                 >
-                    {tagList.slice(0,6).map((tag, index) => (
+                    {viewAllTag?
+                    tagList.map((tag, index) => (
+                        <Button
+                            key={index}
+                            variant="outlined"
+                            size="small"
+                            sx={{
+                                borderRadius: "8px",
+                                textTransform: "none",
+                                backgroundColor: "#E0E0E0",
+                                color: "#333",
+                                "&:hover": {
+                                    backgroundColor: "#BDBDBD",
+                                },
+                            }}
+                            onClick={() => setTags([...tags, tag.name])}
+                        >
+                            {tag.name}
+                        </Button>
+                    )):
+                    tagList.slice(0,6).map((tag, index) => (
                         <Button
                             key={index}
                             variant="outlined"
@@ -236,8 +257,8 @@ function CreatePostPopUp({ open, onClose }) {
                         sx={{
                             gap: "46px",
                         }}
+                        onClick={() => setViewAllTag(!viewAllTag)}
                     >
-                        <AddIcon sx={{ fontSize: "20px", color: "#333" }} />
                         <LocalOfferIcon sx={{ fontSize: "20px", color: "#333" }} />
                     </Button>
                 </Box>
